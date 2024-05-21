@@ -13,8 +13,9 @@
     <string name="folder">Folder</string>
     <string name="error">Error</string>
     <string name="description_for_files_permission">App needs access to your storage to send and receive photos, videos,  music, and other media files. This ensures a smooth content exchange and  enhances your user experience.</string>
-    <string name="crossfade">Crossfade</string>
-    <string name="oops_something_be_wrong">Oops! Something be wrong</string>
+    <string name="oops_something_be_wrong_message">Oops! Something be wrong</string>
+    <string name="incorrect_user_credentials_message">Incorrect user credentials</string>
+    <string name="too_many_login_requests_message">The number of login attempts has been exceeded. Try again in 30 minutes.</string>
     <string name="camera">Camera</string>
     <string name="send">Send</string>
     <string name="selected" tools:ignore="PrivateResource">Selected</string>
