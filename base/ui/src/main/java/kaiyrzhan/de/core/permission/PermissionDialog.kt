@@ -92,7 +92,7 @@ fun PermissionDialog(
                     .background(color = MaterialTheme.colorScheme.onBackground),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                Crossfade(targetState = iconState.value, label = stringResource(id = R.string.crossfade)) { state ->
+                Crossfade(targetState = iconState.value, label = "Crossfade") { state ->
                     TooltipBox(
                         modifier = Modifier.padding(40.dp),
                         positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
