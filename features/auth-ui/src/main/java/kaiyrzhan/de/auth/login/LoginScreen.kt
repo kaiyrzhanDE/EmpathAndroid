@@ -12,20 +12,16 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import kaiyrzhan.de.core.error_dialog.ErrorDialog
 import kaiyrzhan.de.auth.login.dialog.PasswordTipsDialog
 import kaiyrzhan.de.core.effects.SingleActionEffect
+import kaiyrzhan.de.core_ui.R
 import kaiyrzhan.de.navigation.auth.AuthFeature
 import kaiyrzhan.de.navigation.auth.model.ToolbarState
 import javax.inject.Inject
 
-internal class LoginScreen @Inject constructor() : Screen {
-
-    companion object {
-        const val TAG = "LoginScreen"
-    }
+class LoginScreen @Inject constructor() : Screen {
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Content() {
-
         val navigator = LocalNavigator.currentOrThrow
         val privacyScreen = rememberScreen(AuthFeature.PrivacyScreen)
         val registrationScreen = rememberScreen(
@@ -57,12 +53,16 @@ internal class LoginScreen @Inject constructor() : Screen {
 
             is LoginState.Login -> {
 
-
                 if (state.errorDialogState.isVisible) {
+                    val title = when (state.errorDialogState.code) {
+                        400 -> R.string.incorrect_user_credentials_message
+                        429 -> R.string.too_many_login_requests_message
+                        else -> R.string.oops_something_be_wrong_message
+                    }
+
                     ErrorDialog(
-                        iconResId = state.errorDialogState.iconResId,
-                        titleResId = state.errorDialogState.titleResId,
-                        description = state.errorDialogState.description,
+                        icon = R.drawable.ic_attention,
+                        title = title,
                         onDismissRequest = {
                             viewModel.onEvent(LoginEvent.ShowErrorDialog(false))
                         },
@@ -113,5 +113,4 @@ internal class LoginScreen @Inject constructor() : Screen {
             }
         }
     }
-
 }

@@ -1,28 +1,65 @@
 package kaiyrzhan.de.core.network
 
-sealed class RequestResult<out E : Any>(open val data: E? = null) {
-    class InProgress<E : Any>(data: E? = null) : RequestResult<E>(data)
+import retrofit2.HttpException
 
-    class Success<E : Any>(override val data: E) : RequestResult<E>(data)
+sealed interface RequestResult<out T>
 
-    class Error<E : Any>(data: E? = null, val error: Exception? = null) : RequestResult<E>(data)
+class RequestSuccess<T>(val data: T) : RequestResult<T>
+class RequestError(val code: Int, val message: String?) : RequestResult<Nothing>
+class RequestException(val e: Throwable) : RequestResult<Nothing>
+
+
+suspend fun <T : Any> RequestResult<T>.onSuccess(
+    executable: suspend (T) -> Unit
+): RequestResult<T> = apply {
+    if (this is RequestSuccess) {
+        executable(data)
+    }
 }
 
-fun <I : Any, O : Any> RequestResult<I>.map(mapper: (I) -> O): RequestResult<O> {
+
+suspend fun <T : Any> RequestResult<T>.onError(
+    executable: suspend (code: Int, message: String?) -> Unit
+): RequestResult<T> = apply {
+    if (this is RequestError) {
+        executable(code, message)
+    }
+}
+
+suspend fun <T : Any> RequestResult<T>.onException(
+    executable: suspend (e: Throwable) -> Unit
+): RequestResult<T> = apply {
+    if (this is RequestException) {
+        executable(e)
+    }
+}
+
+inline fun <T, R> RequestResult<T>.map(transform: (T) -> R): RequestResult<R> {
     return when (this) {
-        is RequestResult.Success -> RequestResult.Success(mapper(data))
-        is RequestResult.Error -> RequestResult.Error(data?.let(mapper))
-        is RequestResult.InProgress -> RequestResult.InProgress(data?.let(mapper))
+        is RequestError -> this
+        is RequestException -> this
+        is RequestSuccess -> RequestSuccess(transform(data))
     }
 }
 
 fun <T : Any> Result<T>.toRequestResult(): RequestResult<T> {
     return when {
-        isSuccess -> RequestResult.Success(getOrThrow())
-        isFailure -> RequestResult.Error()
+        isSuccess -> RequestSuccess(getOrThrow())
+        isFailure -> {
+            when (val exception = exceptionOrNull()) {
+                is HttpException -> RequestError(
+                    code = exception.code(),
+                    message = exception.message()
+                )
+                is Throwable -> RequestException(exception)
+                else -> error("Impossible branch")
+            }
+        }
         else -> error("Impossible branch")
     }
 }
+
+
 
 
 

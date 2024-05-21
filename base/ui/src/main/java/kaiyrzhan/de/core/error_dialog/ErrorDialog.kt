@@ -13,6 +13,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -22,30 +23,29 @@ import kaiyrzhan.de.utils.isNotNullAndEmpty
 
 @Composable
 fun ErrorDialog(
-    iconResId: Int,
-    titleResId: Int,
-    contentDescription: String? = null,
-    description: String? = null,
+    icon: Int,
+    title: Int,
+    description: Int? = null,
     onDismissRequest: () -> Unit,
 ) {
     Dialog(onDismissRequest = onDismissRequest) {
         Column(modifier = Modifier.padding(all = 20.dp)) {
             Icon(
                 modifier = Modifier.size(100.dp),
-                painter = painterResource(id = iconResId),
-                contentDescription = contentDescription,
+                painter = painterResource(id = icon),
+                contentDescription = null,
             )
             Spacer(modifier = Modifier.height(20.dp))
             Text(
                 modifier = Modifier.fillMaxWidth(),
-                text = stringResource(id = titleResId),
+                text = stringResource(id = title),
                 style = MaterialTheme.typography.titleMedium,
             )
-            if (description.isNotNullAndEmpty()) {
+            if (description != null) {
                 Spacer(modifier = Modifier.height(5.dp))
                 Text(
                     modifier = Modifier.fillMaxWidth(),
-                    text = description.orEmpty()
+                    text = stringResource(id = description)
                 )
             }
 

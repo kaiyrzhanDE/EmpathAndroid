@@ -5,9 +5,11 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kaiyrzhan.de.core.error_dialog.ErrorDialogState
 import kaiyrzhan.de.auth.domain.usecase.LoginUseCase
-import kaiyrzhan.de.core.network.RequestResult
+import kaiyrzhan.de.core.network.onError
+import kaiyrzhan.de.core.network.onException
+import kaiyrzhan.de.core.network.onSuccess
 import kaiyrzhan.de.core.token.usecase.SaveTokenUseCase
-import kaiyrzhan.de.utils.logger.Logger
+import kaiyrzhan.de.core_ui.R
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,18 +17,18 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-import java.util.regex.Pattern
 import javax.inject.Inject
 
 @HiltViewModel
 internal class LoginViewModel @Inject constructor(
-    private val logger: Logger,
     private val loginUseCase: LoginUseCase,
     private val saveTokenUseCase: SaveTokenUseCase,
 ) : ViewModel() {
 
     companion object {
-        private const val TAG = "LoginViewModel"
+        val PasswordRegex =
+            Regex("^(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z!@#$%^&*]{6,128}$")
+
     }
 
     private val _actionsFlow = Channel<LoginAction>(capacity = Channel.BUFFERED)
@@ -52,32 +54,28 @@ internal class LoginViewModel @Inject constructor(
                 }
 
                 is LoginEvent.OnLoginClicked -> {
-                    if (isValidPassword(screenState.password)) {
-                        when (
-                            val request = loginUseCase(
-                                email = screenState.email,
-                                password = screenState.password
-                            )
-                        ) {
-                            is RequestResult.Error -> {
-                                _screenStateFlow.value = screenState.copy(
-                                    errorDialogState = screenState.errorDialogState.copy(
-                                        isVisible = true
-                                    )
+                    if (!PasswordRegex.matches(screenState.password)) {
+                        onEvent(LoginEvent.ShowPasswordTipsDialog(true))
+                        return@launch
+                    }
+
+                    loginUseCase(
+                        email = screenState.email,
+                        password = screenState.password
+                    ).onError { code, _ ->
+                        if (code != 422) {
+                            _screenStateFlow.value = screenState.copy(
+                                errorDialogState = screenState.errorDialogState.copy(
+                                    code = code,
+                                    isVisible = true
                                 )
-                            }
-
-                            is RequestResult.Success -> {
-                                saveTokenUseCase(request.data)
-                                _actionsFlow.send(LoginAction.OnSuccessLogin)
-                            }
-
-                            else -> Unit
+                            )
+                        } else {
+                            onEvent(LoginEvent.ShowPasswordTipsDialog(true))
                         }
-                    } else {
-                        _screenStateFlow.value = screenState.copy(
-                            isPasswordTipsDialogVisible = true,
-                        )
+                    }.onSuccess { token ->
+                        saveTokenUseCase(token)
+                        _actionsFlow.send(LoginAction.OnSuccessLogin)
                     }
                 }
 
@@ -97,12 +95,6 @@ internal class LoginViewModel @Inject constructor(
 
             }
         }
-    }
-
-    private fun isValidPassword(password: String): Boolean {
-        val passwordPattern =
-            Pattern.compile("^(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z!@#$%^&*]{6,128}$")
-        return passwordPattern.matcher(password).matches()
     }
 }
 
