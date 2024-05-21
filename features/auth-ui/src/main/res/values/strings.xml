@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="login">Login</string>
+    <string name="authors">Created by _</string>
+    <string name="enter_login">Enter login</string>
+    <string name="password">Password</string>
+    <string name="reset_password">Reset password</string>
+    <string name="enter_password">Enter password</string>
+    <string name="create_account">Create account</string>
+    <string name="privacy">Privacy</string>
+    <string name="authorization_with_">Authorization with:</string>
+    <string name="facebook">Facebook</string>
+    <string name="google">Google</string>
+    <string name="registration">Registration</string>
+    <string name="email">E-mail</string>
+    <string name="send_code">Send code</string>
+    <string name="send_email_description">We will send you an email with a code for verification you</string>
+    <string name="your_code">Your code</string>
+    <string name="send_code_description">Please confirm your email address</string>
+    <string name="enter_registration_info_description">Fill in all the fields, otherwise registration will be interrupted. </string>
+    <string name="reset_password_description">For successful password recovery, all required fields must be filled out.</string>
+    <string name="enter_email">Enter e-mail</string>
+    <string name="nickname">Nickname</string>
+    <string name="enter_nickname">Enter nickname</string>
+    <string name="password_suggestions">Password suggestions</string>
+    <string name="password_suggestions_content">Include at least one digit. Use at least one special character. Add at least one lowercase letter. Include at least one uppercase letter. Your password should be between 6 and 128 characters long.</string>
+    <string name="required_information">Required information</string>
+    <string name="create_account_description">Fill in all the fields, otherwise registration will be interrupted.</string>
+    <string name="repeated_password">Repeated password</string>
+    <string name="show_password">Show password</string>
+    <string name="hide_password">Hide password</string>
+    <string name="cancel">Cancel</string>
+    <string name="back">Back</string>
+    <string name="audio_file">Audio file</string>
+    <string name="document">Document</string>
+    <string name="video_file">Video file</string>
+    <string name="file">File</string>
+    <string name="folder">Folder</string>
+</resources>

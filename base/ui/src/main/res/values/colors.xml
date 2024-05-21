@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="Black">#FF000000</color>
+    <color name="White">#FFFFFFFF</color>
+    <color name="Mustard">#FFFBA531</color>
+    <color name="Peach">#FFF36A33</color>
+    <color name="Orange">#FFEE4B35</color>
+    <color name="LightRed">#FFE6244D</color>
+    <color name="RoseRed">#FFC32463</color>
+    <color name="VioletBlue">#FF4E2D77</color>
+    <color name="CharcoalGray">#FF383338</color>
+    <color name="SlateGray">#FF585158</color>
+    <color name="Gray">#808080</color>
+    <color name="GunmetalGray">#FF312C31</color>
+    <color name="Smoky">#FFCAC4D0</color>
+</resources>

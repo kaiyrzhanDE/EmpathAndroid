@@ -1,0 +1,116 @@
+[versions]
+
+#main
+androidx-core-ktx = "1.13.1"
+androidx-lifecycle-runtime-ktx = "2.7.0"
+androidx-activity-compose = "1.9.0"
+androidx-compose-material3 = "1.2.1"
+androidx-compose-bom = "2024.05.00"
+androidx-core-splashscreen = "1.0.1"
+kotlin-compiler-extension = "1.5.5"
+org-jetbrains-kotlinx-serialization-json = "1.6.3"
+
+#navigation
+voyager = "1.0.0"
+
+#network
+com-squareup-okhttp3-logging-intercepter = "5.0.0-alpha.11"
+com-squareup-retrofit = "2.9.0"
+retrofit-adapters-result = "1.0.9"
+com-jakewharton-retrofit-kotlinx-serialization-converter = "1.0.0"
+
+#plugins
+android-application = "8.2.2"
+android-kotlin = "1.9.20"
+
+#gradle
+android-gradle-plugin = "8.0.2"
+kotlin-gradle-plugin = "1.8.21"
+
+#test
+junit = "4.13.2"
+androidx-test-ext-junit = "1.1.5"
+androidx-test-espresso-core = "3.5.1"
+androidx-test-compose-bom = "2024.05.00"
+
+#dependency injection
+androidx-hilt-compiler = "1.2.0"
+com-google-dagger-hilt-android = "2.48.1"
+com-google-dagger-hilt-android-compiler = "2.48.1"
+androidx-hilt-navigation-compose = "1.2.0"
+appcompat = "1.6.1"
+material = "1.12.0"
+
+#design
+io-coil-compose = "2.6.0"
+com-google-accompanist-permissions = "0.34.0"
+
+[libraries]
+
+#main
+androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "androidx-core-ktx" }
+androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "androidx-lifecycle-runtime-ktx" }
+androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "androidx-activity-compose" }
+androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "androidx-compose-bom" }
+androidx-compose-ui = { group = "androidx.compose.ui", name = "ui" }
+androidx-compose-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
+androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
+androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "androidx-compose-material3" }
+androidx-core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "androidx-core-splashscreen" }
+
+#gradle
+android-gradle-plugin = { module = "com.android.tools.build:gradle", version.ref = "android-gradle-plugin" }
+kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin-gradle-plugin" }
+
+#dependency injection
+androidx-hilt-compiler = { group = "androidx.hilt", name = "hilt-compiler", version.ref = "androidx-hilt-compiler" }
+com-google-dagger-hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "com-google-dagger-hilt-android" }
+com-google-dagger-hilt-android-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "com-google-dagger-hilt-android-compiler" }
+androidx-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "androidx-hilt-navigation-compose" }
+
+#navigation
+voyager-navigator = { group = "cafe.adriel.voyager", name = "voyager-navigator", version.ref = "voyager" }
+voyager-screenmodel = { group = "cafe.adriel.voyager", name = "voyager-screenmodel", version.ref = "voyager" }
+voyager-navigator-bottom-sheet = { group = "cafe.adriel.voyager", name = "voyager-bottom-sheet-navigator", version.ref = "voyager" }
+voyager-transitions = { group = "cafe.adriel.voyager", name = "voyager-transitions", version.ref = "voyager" }
+voyager-hilt = { group = "cafe.adriel.voyager", name = "voyager-hilt", version.ref = "voyager" }
+
+#network
+com-squareup-retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "com-squareup-retrofit" }
+com-squareup-okhttp3-logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "com-squareup-okhttp3-logging-intercepter" }
+org-jetbrains-kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "org-jetbrains-kotlinx-serialization-json" }
+com-jakewharton-retrofit-kotlinx-serialization-converter = { module = "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter", version.ref = "com-jakewharton-retrofit-kotlinx-serialization-converter" }
+retrofit-adapters-result = { module = "com.github.skydoves:retrofit-adapters-result", version.ref = "retrofit-adapters-result" }
+
+#design
+io-coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "io-coil-compose" }
+com-google-accompanist-permissions = { group = "com.google.accompanist", name = "accompanist-permissions", version.ref= "com-google-accompanist-permissions" }
+
+#test
+junit = { group = "junit", name = "junit", version.ref = "junit" }
+androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-test-ext-junit" }
+androidx-test-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "androidx-test-espresso-core" }
+androidx-test-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "androidx-test-compose-bom" }
+androidx-compose-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4" }
+
+#debug-test
+androidx-compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
+androidx-compose-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest" }
+appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+
+
+
+[plugins]
+
+#main
+com-android-application = { id = "com.android.application", version.ref = "android-application" }
+com-android-library = { id = "com.android.library", version.ref = "android-application" }
+org-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "android-kotlin" }
+org-jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "android-kotlin" }
+java-library = { id = "java-library", version.ref = "android-kotlin" }
+
+#dependency injection
+com-google-dagger-hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "com-google-dagger-hilt-android" }
+org-jetbrains-kotlin-plugin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "android-kotlin" }
+
