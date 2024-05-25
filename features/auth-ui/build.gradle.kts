@@ -1,5 +1,6 @@
 plugins {
     id("convention.featureModule")
+    alias(libs.plugins.org.jetbrains.kotlin.plugin.serialization)
 }
 
 android {
@@ -7,7 +8,6 @@ android {
 }
 
 dependencies {
-    api(project(":base:ui"))
-    implementation(project(":base:navigation"))
+    implementation(project(":base:ui"))
     implementation(project(":features:auth-api"))
 }

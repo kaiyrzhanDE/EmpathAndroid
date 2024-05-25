@@ -3,9 +3,8 @@ package kaiyrzhan.de.auth.data.mapper
 import kaiyrzhan.de.auth.data.models.ResetPasswordRequest
 import kaiyrzhan.de.auth.domain.models.ResetPassword
 import kaiyrzhan.de.core.preview.Mapper
-import javax.inject.Inject
 
-class ResetPasswordMapper @Inject constructor() : Mapper<ResetPassword, ResetPasswordRequest> {
+class ResetPasswordMapper : Mapper<ResetPassword, ResetPasswordRequest> {
 
     override fun toDomain(data: ResetPasswordRequest): ResetPassword =
         ResetPassword(

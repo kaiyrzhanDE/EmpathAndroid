@@ -22,5 +22,5 @@ include(":features:auth-ui")
 
 include(":base:ui")
 include(":base:data")
-include(":base:navigation")
 include(":base:utils")
+include(":features:root")

@@ -11,17 +11,16 @@ kotlin-compiler-extension = "1.5.5"
 org-jetbrains-kotlinx-serialization-json = "1.6.3"
 
 #navigation
-voyager = "1.0.0"
+essenty = "2.0.0"
+#noinspection GradleDependency
+decompose = "2.2.3"
+decompose-extensions-jetpack = "2.2.3"
 
 #network
 com-squareup-okhttp3-logging-intercepter = "5.0.0-alpha.11"
 com-squareup-retrofit = "2.9.0"
 retrofit-adapters-result = "1.0.9"
 com-jakewharton-retrofit-kotlinx-serialization-converter = "1.0.0"
-
-#plugins
-android-application = "8.2.2"
-android-kotlin = "1.9.20"
 
 #gradle
 android-gradle-plugin = "8.0.2"
@@ -34,16 +33,17 @@ androidx-test-espresso-core = "3.5.1"
 androidx-test-compose-bom = "2024.05.00"
 
 #dependency injection
-androidx-hilt-compiler = "1.2.0"
-com-google-dagger-hilt-android = "2.48.1"
-com-google-dagger-hilt-android-compiler = "2.48.1"
-androidx-hilt-navigation-compose = "1.2.0"
-appcompat = "1.6.1"
-material = "1.12.0"
+io-insert-koin = "3.5.6"
 
 #design
 io-coil-compose = "2.6.0"
 com-google-accompanist-permissions = "0.34.0"
+appcompat = "1.6.1"
+material = "1.12.0"
+
+#plugins
+android-application = "8.2.2"
+android-kotlin = "1.9.20"
 
 [libraries]
 
@@ -63,17 +63,14 @@ android-gradle-plugin = { module = "com.android.tools.build:gradle", version.ref
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin-gradle-plugin" }
 
 #dependency injection
-androidx-hilt-compiler = { group = "androidx.hilt", name = "hilt-compiler", version.ref = "androidx-hilt-compiler" }
-com-google-dagger-hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "com-google-dagger-hilt-android" }
-com-google-dagger-hilt-android-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "com-google-dagger-hilt-android-compiler" }
-androidx-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "androidx-hilt-navigation-compose" }
+io-insert-koin-core = {group = "io.insert-koin", name = "koin-core", version.ref = "io-insert-koin"}
+io-insert-koin-test = {group = "io.insert-koin", name = "koin-test", version.ref = "io-insert-koin"}
+io-insert-koin-android = {group = "io.insert-koin", name = "koin-android", version.ref = "io-insert-koin"}
 
 #navigation
-voyager-navigator = { group = "cafe.adriel.voyager", name = "voyager-navigator", version.ref = "voyager" }
-voyager-screenmodel = { group = "cafe.adriel.voyager", name = "voyager-screenmodel", version.ref = "voyager" }
-voyager-navigator-bottom-sheet = { group = "cafe.adriel.voyager", name = "voyager-bottom-sheet-navigator", version.ref = "voyager" }
-voyager-transitions = { group = "cafe.adriel.voyager", name = "voyager-transitions", version.ref = "voyager" }
-voyager-hilt = { group = "cafe.adriel.voyager", name = "voyager-hilt", version.ref = "voyager" }
+decompose = { group = "com.arkivanov.decompose", name = "decompose", version.ref = "decompose" }
+decompose-extensions-jetpack = { group = "com.arkivanov.decompose", name = "extensions-compose-jetpack", version.ref = "decompose-extensions-jetpack" }
+essenty-lifecycle-coroutines = { group = "com.arkivanov.essenty", name = "lifecycle-coroutines", version.ref = "essenty"}
 
 #network
 com-squareup-retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "com-squareup-retrofit" }
@@ -96,10 +93,8 @@ androidx-compose-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4
 #debug-test
 androidx-compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 androidx-compose-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest" }
-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
-
-
 
 [plugins]
 
@@ -110,7 +105,5 @@ org-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.re
 org-jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "android-kotlin" }
 java-library = { id = "java-library", version.ref = "android-kotlin" }
 
-#dependency injection
-com-google-dagger-hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "com-google-dagger-hilt-android" }
 org-jetbrains-kotlin-plugin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "android-kotlin" }
 

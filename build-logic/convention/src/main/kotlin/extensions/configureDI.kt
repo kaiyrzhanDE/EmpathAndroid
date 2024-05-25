@@ -10,16 +10,9 @@ import utils.getLibrary
 
 internal inline fun <reified T : CommonExtension<*, *, *, *>> Project.configureDI() {
     extensions.getByType<T>().apply {
-        with(plugins) {
-            apply("dagger.hilt.android.plugin")
-            apply("kotlin-kapt")
-        }
-
         dependencies {
-            add(IMPLEMENTATION, project.getLibrary("com-google-dagger-hilt-android"))
-            add(IMPLEMENTATION, project.getLibrary("androidx-hilt-navigation-compose"))
-            add(KAPT, project.getLibrary("androidx-hilt-compiler"))
-            add(KAPT, project.getLibrary("com-google-dagger-hilt-android-compiler"))
+            add(IMPLEMENTATION, project.getLibrary("io-insert-koin-core"))
+            add(IMPLEMENTATION, project.getLibrary("io-insert-koin-android"))
         }
     }
 }

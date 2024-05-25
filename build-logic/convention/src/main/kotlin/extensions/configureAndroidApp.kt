@@ -10,6 +10,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import utils.IMPLEMENTATION
 import utils.TEST_IMPLEMENTATION
 import utils.getLibrary
+import utils.getVersion
 
 internal inline fun <reified T : CommonExtension<*, *, *, *>>  Project.configureAndroid() {
     with(extensions.getByType<T>()) {

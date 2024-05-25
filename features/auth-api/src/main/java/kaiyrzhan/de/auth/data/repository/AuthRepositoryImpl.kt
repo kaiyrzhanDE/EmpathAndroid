@@ -10,9 +10,8 @@ import kaiyrzhan.de.core.network.toRequestResult
 import kaiyrzhan.de.core.token.mapper.TokenMapper
 import kaiyrzhan.de.core.token.models.Token
 import okhttp3.MultipartBody
-import javax.inject.Inject
 
-class AuthRepositoryImpl @Inject constructor(
+class AuthRepositoryImpl(
     private val api: AuthApi,
     private val createUserMapper: CreateUserMapper,
     private val userMapper: UserMapper,

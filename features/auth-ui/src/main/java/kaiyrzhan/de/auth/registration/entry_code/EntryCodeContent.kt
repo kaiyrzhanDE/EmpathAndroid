@@ -15,6 +15,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -23,8 +24,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import kaiyrzhan.de.auth.registration.entry_code.components.CodeTextFieldWithKeyboard
+import kaiyrzhan.de.auth.registration.entry_code.model.EntryCodeState
 import kaiyrzhan.de.core.components.ToolbarText
-import kaiyrzhan.de.navigation.auth.model.ToolbarState
+import kaiyrzhan.de.auth.model.ToolbarState
 import kaiyrzhan.de.core.preview.PreviewTheme
 import kaiyrzhan.de.core.preview.Previews
 import kaiyrzhan.de.feature_auth.R
@@ -32,51 +34,57 @@ import kaiyrzhan.de.feature_auth.R
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun EntryCodeContent(
-    toolbarState: ToolbarState,
-    code: String?,
-    onCodeChange: (code: String) -> Unit,
-    onRemoveClicked: () -> Unit,
-    onBackClicked: () -> Unit,
-    onSendCodeClicked: () -> Unit,
+    component: EntryCodeComponent,
 ) {
-    val title = when (toolbarState) {
-        ToolbarState.RESET_PASSWORD -> stringResource(id = R.string.reset_password)
-        ToolbarState.REGISTRATION -> stringResource(id = R.string.registration)
-    }
+    val screenState = component.screenStateFlow.collectAsState()
 
-    Scaffold(
-        topBar = {
-            CenterAlignedTopAppBar(
-                title = { ToolbarText(text = title) },
-                navigationIcon = {
-                    IconButton(onClick = onBackClicked) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_arrow_backward),
-                            contentDescription = stringResource(id = R.string.back),
-                            tint = Color.Unspecified,
-                        )
-                    }
+    when (val state = screenState.value) {
+        is EntryCodeState.None -> {}
+        is EntryCodeState.Loading -> {
+            //TODO Loading Animation
+        }
+
+        is EntryCodeState.EntryCode -> {
+            val title = when (state.toolbarState) {
+                ToolbarState.RESET_PASSWORD -> stringResource(id = R.string.reset_password)
+                ToolbarState.REGISTRATION -> stringResource(id = R.string.registration)
+            }
+            Scaffold(
+                topBar = {
+                    CenterAlignedTopAppBar(
+                        title = { ToolbarText(text = title) },
+                        navigationIcon = {
+                            IconButton(onClick = component::onBackClicked) {
+                                Icon(
+                                    painter = painterResource(id = R.drawable.ic_arrow_backward),
+                                    contentDescription = stringResource(id = R.string.back),
+                                    tint = Color.Unspecified,
+                                )
+                            }
+                        }
+                    )
+                },
+            ) { paddingValues ->
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues)
+                        .padding(horizontal = 20.dp, vertical = 30.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) {
+                    Spacer(modifier = Modifier.weight(1f))
+                    Description()
+                    Spacer(modifier = Modifier.height(40.dp))
+                    CodeTextFieldWithKeyboard(
+                        code = state.code,
+                        length = 6,
+                        onNumberClicked = component::onCodeChanged,
+                        onRemoveClicked = component::onRemoveCodeClicked,
+                        onEnterClicked = component::onCheckCodeClicked,
+                    )
                 }
-            )
-        },
-    ) { paddingValues ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-                .padding(horizontal = 20.dp, vertical = 30.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            Spacer(modifier = Modifier.weight(1f))
-            Description()
-            Spacer(modifier = Modifier.height(40.dp))
-            CodeTextFieldWithKeyboard(
-                code = code.orEmpty(),
-                length = 6,
-                onNumberClicked = onCodeChange,
-                onRemoveClicked = onRemoveClicked,
-                onEnterClicked = onSendCodeClicked,
-            )
+            }
+
         }
     }
 }
@@ -102,13 +110,6 @@ private fun ColumnScope.Description() {
 @Composable
 private fun Preview() {
     PreviewTheme {
-        EntryCodeContent(
-            toolbarState = ToolbarState.REGISTRATION,
-            code = "",
-            onCodeChange = {},
-            onSendCodeClicked = {},
-            onBackClicked = {},
-            onRemoveClicked = {},
-        )
+        EntryCodeContent(component = FakeEntryCodeComponent())
     }
 }

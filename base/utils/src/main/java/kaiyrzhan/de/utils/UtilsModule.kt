@@ -1,16 +1,10 @@
 package kaiyrzhan.de.utils
 
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
 import kaiyrzhan.de.utils.logger.androidLogger
 import kaiyrzhan.de.utils.logger.Logger
+import org.koin.dsl.bind
+import org.koin.dsl.module
 
-@Module
-@InstallIn(SingletonComponent::class)
-object UtilsModule {
-
-    @Provides
-    fun provideLogger(): Logger = androidLogger()
+val utilsModule = module {
+    factory { androidLogger() } bind Logger::class
 }

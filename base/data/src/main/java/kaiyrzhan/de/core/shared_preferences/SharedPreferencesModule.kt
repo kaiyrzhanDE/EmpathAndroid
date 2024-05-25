@@ -1,34 +1,20 @@
 package kaiyrzhan.de.core.shared_preferences
 
-import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
+import org.koin.android.ext.koin.androidApplication
+import org.koin.dsl.bind
+import org.koin.dsl.module
 
-@Module
-@InstallIn(SingletonComponent::class)
-object SharedPreferencesModule {
+private const val SHARED_PREFERENCES = "shared_preferences"
 
-    private const val SHARED_PREFERENCES = "shared_preferences"
+val sharedPreferencesModule = module {
+    single {
+        androidApplication().getSharedPreferences(
+            SHARED_PREFERENCES,
+            Context.MODE_PRIVATE,
+        )
+    } bind SharedPreferences::class
 
-    @Provides
-    @Singleton
-    fun provideSharedPreferences(
-        app: Application
-    ): SharedPreferences {
-        return app.getSharedPreferences(SHARED_PREFERENCES, Context.MODE_PRIVATE)
-    }
-
-    @Provides
-    @Singleton
-    fun provideTokenPreferences(
-        sharedPreferences: SharedPreferences,
-    ): TokenPreferences {
-        return TokenPreferencesImpl(sharedPreferences)
-    }
-
+    single { TokenPreferencesImpl(get<SharedPreferences>()) } bind TokenPreferences::class
 }

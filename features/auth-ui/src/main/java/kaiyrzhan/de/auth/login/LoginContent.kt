@@ -12,11 +12,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
@@ -24,70 +27,97 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import kaiyrzhan.de.auth.components.CustomTextField
+import kaiyrzhan.de.auth.login.dialog.PasswordTipsDialog
+import kaiyrzhan.de.auth.login.model.LoginState
 import kaiyrzhan.de.core.theme.*
 import kaiyrzhan.de.core.components.Logo
+import kaiyrzhan.de.core.error_dialog.ErrorDialog
 import kaiyrzhan.de.core.extensions.modifiers.noRippleClickable
 import kaiyrzhan.de.core.preview.PreviewTheme
 import kaiyrzhan.de.core.preview.Previews
 import kaiyrzhan.de.feature_auth.R
-import kaiyrzhan.de.utils.isNotBlankAndNull
+import kaiyrzhan.de.utils.kotlin.isNotBlankAndNull
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun LoginContent(
-    username: String,
-    onUsernameChange: (String) -> Unit,
-    password: String,
-    onPasswordChange: (String) -> Unit,
-    onRegistrationClicked: () -> Unit,
-    onResetPasswordClicked: () -> Unit,
-    onGoogleAuthClicked: () -> Unit,
-    onFacebookAuthClicked: () -> Unit,
-    onPrivacyClicked: () -> Unit,
-    onLoginClicked: () -> Unit,
-) {
-    Scaffold(
-    ) { paddingValues ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-                .padding(horizontal = 20.dp, vertical = 30.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            Spacer(modifier = Modifier.weight(1f))
-            Logo(modifier = Modifier.align(Alignment.CenterHorizontally))
-            Spacer(modifier = Modifier.weight(1f))
-            Login(
-                value = username,
-                onValueChange = { newUsername -> onUsernameChange(newUsername.orEmpty()) },
-                placeholder = stringResource(id = R.string.enter_login),
-                painter = painterResource(id = R.drawable.ic_email),
-                contentDescription = stringResource(id = R.string.email)
-            )
-            Spacer(modifier = Modifier.height(20.dp))
-            Password(
-                value = password,
-                onValueChange = { newPassword -> onPasswordChange(newPassword.orEmpty()) },
-                placeholder = stringResource(
-                    id = R.string.enter_password
-                ),
-                painter = painterResource(id = R.drawable.ic_key),
-                contentDescription = stringResource(id = R.string.email),
-                onResetPasswordClicked = onResetPasswordClicked,
-            )
-            Spacer(modifier = Modifier.weight(1f))
-            UserActions(
-                loginEnabled = username.isNotBlankAndNull() && password.isNotBlankAndNull(),
-                onLoginClicked = onLoginClicked,
-                onPrivacyClicked = onPrivacyClicked,
-                onRegistrationClicked = onRegistrationClicked,
-            )
-            Spacer(modifier = Modifier.weight(1f))
-            AlternativeAuth(
-                onGoogleAuthClicked = onGoogleAuthClicked,
-                onFacebookAuthClicked = onFacebookAuthClicked,
-            )
+fun LoginContent(component: LoginComponent) {
+    val screenState = component.screenStateFlow.collectAsState()
+
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = false)
+
+    when (val state = screenState.value) {
+        is LoginState.None -> Unit
+
+        is LoginState.Loading -> {
+            //TODO Loading Animation
+        }
+
+        is LoginState.Login -> {
+
+            if (state.errorDialogState.isVisible) {
+                ErrorDialog(
+                    icon = R.drawable.ic_attention,
+                    title = when (state.errorDialogState.code) {
+                        400 -> kaiyrzhan.de.core_ui.R.string.incorrect_user_credentials_message
+                        429 -> kaiyrzhan.de.core_ui.R.string.too_many_login_requests_message
+                        else -> kaiyrzhan.de.core_ui.R.string.oops_something_be_wrong_message
+                    },
+                    onDismissRequest = { component.showErrorDialog(false) },
+                )
+            }
+
+            if (state.isPasswordTipsDialogVisible) {
+                PasswordTipsDialog(
+                    sheetState = sheetState,
+                    onDismissRequest = { component.showPasswordTipsDialog(false) },
+                )
+            }
+
+            Scaffold(
+            ) { paddingValues ->
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues)
+                        .padding(horizontal = 20.dp, vertical = 30.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) {
+                    Spacer(modifier = Modifier.weight(1f))
+                    Logo(modifier = Modifier.align(Alignment.CenterHorizontally))
+                    Spacer(modifier = Modifier.weight(1f))
+                    Login(
+                        value = state.email,
+                        onValueChange = component::onEmailChanged,
+                        placeholder = stringResource(id = R.string.enter_login),
+                        painter = painterResource(id = R.drawable.ic_email),
+                        contentDescription = stringResource(id = R.string.email)
+                    )
+                    Spacer(modifier = Modifier.height(20.dp))
+                    Password(
+                        value = state.password,
+                        onValueChange = component::onPasswordChanged,
+                        placeholder = stringResource(id = R.string.enter_password),
+                        painter = painterResource(id = R.drawable.ic_key),
+                        contentDescription = stringResource(id = R.string.email),
+                        onResetPasswordClicked = component::onResetPasswordClicked,
+                    )
+                    Spacer(modifier = Modifier.weight(1f))
+                    UserActions(
+                        loginEnabled = state.email.isNotBlankAndNull() && state.password.isNotBlankAndNull(),
+                        onLoginClicked = component::onLoginClicked,
+                        onPrivacyClicked = component::onPrivacyClicked,
+                        onRegistrationClicked = component::onRegistrationClicked,
+                    )
+                    Spacer(modifier = Modifier.weight(1f))
+                    AlternativeAuth(
+                        onGoogleAuthClicked = component::onGoogleAuthClicked,
+                        onFacebookAuthClicked = component::onFacebookAuthClicked,
+                    )
+                }
+            }
+
+
         }
     }
 }
@@ -244,17 +274,6 @@ private fun ColumnScope.AlternativeAuth(
 @Composable
 private fun Preview() {
     PreviewTheme {
-        LoginContent(
-            onGoogleAuthClicked = {},
-            onFacebookAuthClicked = {},
-            onRegistrationClicked = {},
-            onPrivacyClicked = {},
-            username = "",
-            onUsernameChange = {},
-            password = "",
-            onPasswordChange = {},
-            onResetPasswordClicked = {},
-            onLoginClicked = {},
-        )
+        LoginContent(FakeLoginComponent())
     }
 }

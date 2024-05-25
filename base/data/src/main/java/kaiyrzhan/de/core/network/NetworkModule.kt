@@ -2,35 +2,25 @@ package kaiyrzhan.de.core.network
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.skydoves.retrofit.adapters.result.ResultCallAdapterFactory
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
 import kaiyrzhan.de.core.token.TokenAuthenticator
 import kaiyrzhan.de.core.token.TokenInterceptor
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import org.koin.dsl.bind
+import org.koin.dsl.module
+import retrofit2.Converter.Factory
 import retrofit2.Retrofit
 import java.util.concurrent.TimeUnit
-import javax.inject.Singleton
 
-@Module
-@InstallIn(SingletonComponent::class)
-object NetworkModule {
-    //TODO base url need to be in build config
-    const val BASE_URL = "http://20.2.69.223/"
+internal const val BASE_URL = "http://192.168.1.227"
 
-    @Singleton
-    @Provides
-    fun provideOkHttpClient(
-        tokenInterceptor: TokenInterceptor,
-        tokenAuthenticator: TokenAuthenticator,
-    ): OkHttpClient {
-        return OkHttpClient.Builder()
-            .authenticator(tokenAuthenticator)
-            .addInterceptor(tokenInterceptor)
+val networkModule = module {
+    single {
+        OkHttpClient.Builder()
+            .authenticator(get<TokenAuthenticator>())
+            .addInterceptor(get<TokenInterceptor>())
             .addInterceptor(HttpLoggingInterceptor().apply {
                 level = HttpLoggingInterceptor.Level.BODY
             })
@@ -38,18 +28,17 @@ object NetworkModule {
             .readTimeout(60, TimeUnit.SECONDS)
             .writeTimeout(60, TimeUnit.SECONDS)
             .build()
-    }
+    } bind OkHttpClient::class
 
-    @Singleton
-    @Provides
-    fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
-        val jsonConverterFactory = Json.asConverterFactory("application/json".toMediaType())
-        return Retrofit.Builder()
+    factory { Json.asConverterFactory("application/json".toMediaType()) } bind Factory::class
+
+    single {
+        Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addCallAdapterFactory(ResultCallAdapterFactory.create())
-            .addConverterFactory(jsonConverterFactory)
-            .client(okHttpClient)
+            .addConverterFactory(get<Factory>())
+            .client(get<OkHttpClient>())
             .build()
-    }
+    } bind Retrofit::class
 
 }

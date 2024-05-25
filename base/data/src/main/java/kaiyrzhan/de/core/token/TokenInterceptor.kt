@@ -4,13 +4,9 @@ import kaiyrzhan.de.core.shared_preferences.TokenPreferences
 import kaiyrzhan.de.utils.logger.Logger
 import okhttp3.Interceptor
 import okhttp3.Response
-import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
-class TokenInterceptor @Inject constructor(
+class TokenInterceptor(
     private val tokenPreferences: TokenPreferences,
-    private val logger: Logger,
 ): Interceptor {
 
     companion object{
@@ -26,7 +22,6 @@ class TokenInterceptor @Inject constructor(
         val authToken = tokenPreferences.getToken()
         if (authToken?.accessToken != null) {
             requestBuilder.addHeader(AUTH_HEADER, "$BEARER ${authToken.accessToken}")
-            logger.e("TokenInterceptor", "Bearer ${authToken.accessToken}")
         }
 
         val request = requestBuilder.build()

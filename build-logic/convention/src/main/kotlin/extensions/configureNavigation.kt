@@ -7,10 +7,9 @@ import utils.getLibrary
 
 internal fun Project.configureNavigation() {
     dependencies {
-        add(IMPLEMENTATION, project.getLibrary("voyager-navigator"))
-        add(IMPLEMENTATION, project.getLibrary("voyager-screenmodel"))
-        add(IMPLEMENTATION, project.getLibrary("voyager-navigator-bottom-sheet"))
-        add(IMPLEMENTATION, project.getLibrary("voyager-transitions"))
-        add(IMPLEMENTATION, project.getLibrary("voyager-hilt"))
+        add(IMPLEMENTATION, project.getLibrary("org-jetbrains-kotlinx-serialization-json"))
+        add(IMPLEMENTATION, project.getLibrary("decompose"))
+        add(IMPLEMENTATION, project.getLibrary("decompose-extensions-jetpack"))
+        add(IMPLEMENTATION, project.getLibrary("essenty-lifecycle-coroutines"))
     }
 }

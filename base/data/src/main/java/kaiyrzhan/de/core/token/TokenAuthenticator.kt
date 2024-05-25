@@ -9,11 +9,8 @@ import okhttp3.Route
 import retrofit2.HttpException
 import java.io.IOException
 import java.util.concurrent.Semaphore
-import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
-class TokenAuthenticator @Inject constructor(
+class TokenAuthenticator constructor(
 //    @AuthQualifier private val refreshTokenUseCase: RefreshTokenUseCase,
     private val tokenPreferences: TokenPreferences,
 ) : Authenticator {

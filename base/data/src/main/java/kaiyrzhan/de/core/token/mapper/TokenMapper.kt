@@ -3,9 +3,8 @@ package kaiyrzhan.de.core.token.mapper
 import kaiyrzhan.de.core.token.models.Token
 import kaiyrzhan.de.core.token.models.TokenRequest
 import kaiyrzhan.de.core.preview.Mapper
-import javax.inject.Inject
 
-class TokenMapper @Inject constructor() : Mapper<Token, TokenRequest> {
+class TokenMapper : Mapper<Token, TokenRequest> {
 
     override fun toDomain(data: TokenRequest): Token =
         Token(

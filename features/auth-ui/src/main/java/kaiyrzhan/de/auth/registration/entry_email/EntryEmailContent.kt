@@ -17,6 +17,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -26,8 +27,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import kaiyrzhan.de.auth.components.CustomTextField
 import kaiyrzhan.de.auth.components.IconWithDescription
+import kaiyrzhan.de.auth.registration.entry_email.model.EntryEmailState
 import kaiyrzhan.de.core.components.ToolbarText
-import kaiyrzhan.de.navigation.auth.model.ToolbarState
+import kaiyrzhan.de.auth.model.ToolbarState
 import kaiyrzhan.de.core.preview.PreviewTheme
 import kaiyrzhan.de.core.preview.Previews
 import kaiyrzhan.de.feature_auth.R
@@ -35,70 +37,76 @@ import kaiyrzhan.de.feature_auth.R
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun EntryEmailContent(
-    state: ToolbarState,
-    email: String,
-    onEmailChange: (email: String) -> Unit,
-    onBackClicked: () -> Unit,
-    onSendEmailClicked: () -> Unit,
+    component: EntryEmailComponent,
 ) {
+    val screenState = component.screenStateFlow.collectAsState()
 
-    val title = when (state) {
-        ToolbarState.RESET_PASSWORD -> stringResource(id = R.string.reset_password)
-        ToolbarState.REGISTRATION -> stringResource(id = R.string.registration)
-    }
-
-    Scaffold(
-        topBar = {
-            CenterAlignedTopAppBar(
-                title = { ToolbarText(text = title) },
-                navigationIcon = {
-                    IconButton(onClick = onBackClicked) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_arrow_backward),
-                            contentDescription = stringResource(id = R.string.back),
-                            tint = Color.Unspecified,
-                        )
-                    }
-                }
-            )
-        },
-    ) { paddingValues ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-                .padding(horizontal = 20.dp, vertical = 30.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            Spacer(modifier = Modifier.weight(0.5f))
-            IconWithDescription(
-                painter = painterResource(id = R.drawable.ic_send_mail),
-                contentDescription = stringResource(id = R.string.email),
-                description = stringResource(id = R.string.send_email_description),
-            )
-            Spacer(modifier = Modifier.weight(0.5f))
-            Email(
-                value = email,
-                onValueChange = {newEmail -> onEmailChange(newEmail.orEmpty())},
-                placeholder = stringResource(id = R.string.enter_email),
-                painter = painterResource(id = R.drawable.ic_email),
-                contentDescription = stringResource(id = R.string.email)
-            )
-            Spacer(modifier = Modifier.height(20.dp))
-            Button(
-                onClick = onSendEmailClicked,
-                shape = RoundedCornerShape(10.dp),
-            ) {
-                Text(
-                    text = stringResource(id = R.string.send_code).uppercase(),
-                    style = MaterialTheme.typography.titleSmall,
-                )
-            }
-            Spacer(modifier = Modifier.weight(3f))
+    when (val state = screenState.value) {
+        is EntryEmailState.None -> {}
+        is EntryEmailState.Loading -> {
+            //TODO Loading Animation
         }
 
-    }
+        is EntryEmailState.EntryEmail -> {
+            val title = when (state.toolbarState) {
+                ToolbarState.RESET_PASSWORD -> stringResource(id = R.string.reset_password)
+                ToolbarState.REGISTRATION -> stringResource(id = R.string.registration)
+            }
 
+            Scaffold(
+                topBar = {
+                    CenterAlignedTopAppBar(
+                        title = { ToolbarText(text = title) },
+                        navigationIcon = {
+                            IconButton(onClick = component::onBackClicked) {
+                                Icon(
+                                    painter = painterResource(id = R.drawable.ic_arrow_backward),
+                                    contentDescription = stringResource(id = R.string.back),
+                                    tint = Color.Unspecified,
+                                )
+                            }
+                        }
+                    )
+                },
+            ) { paddingValues ->
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues)
+                        .padding(horizontal = 20.dp, vertical = 30.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) {
+                    Spacer(modifier = Modifier.weight(0.5f))
+                    IconWithDescription(
+                        painter = painterResource(id = R.drawable.ic_send_mail),
+                        contentDescription = stringResource(id = R.string.email),
+                        description = stringResource(id = R.string.send_email_description),
+                    )
+                    Spacer(modifier = Modifier.weight(0.5f))
+                    Email(
+                        value = state.email,
+                        onValueChange = component::onEmailChanged,
+                        placeholder = stringResource(id = R.string.enter_email),
+                        painter = painterResource(id = R.drawable.ic_email),
+                        contentDescription = stringResource(id = R.string.email)
+                    )
+                    Spacer(modifier = Modifier.height(20.dp))
+                    Button(
+                        onClick = component::onSendEmailClicked,
+                        shape = RoundedCornerShape(10.dp),
+                    ) {
+                        Text(
+                            text = stringResource(id = R.string.send_code).uppercase(),
+                            style = MaterialTheme.typography.titleSmall,
+                        )
+                    }
+                    Spacer(modifier = Modifier.weight(3f))
+                }
+
+            }
+
+        }
+    }
 }
 
 @Composable
@@ -136,11 +144,7 @@ private fun ColumnScope.Email(
 private fun Preview() {
     PreviewTheme {
         EntryEmailContent(
-            state = ToolbarState.RESET_PASSWORD,
-            onBackClicked = {},
-            onSendEmailClicked = {},
-            email = "",
-            onEmailChange = {}
+            component = FakeEntryEmailComponent(),
         )
     }
 }

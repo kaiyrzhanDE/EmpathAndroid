@@ -1,45 +1,25 @@
 package kaiyrzhan.de.core.token
 
-import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.skydoves.retrofit.adapters.result.ResultCallAdapterFactory
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
-import kaiyrzhan.de.core.network.NetworkModule
+import kaiyrzhan.de.core.network.BASE_URL
 import kaiyrzhan.de.core.token.api.TokenApi
-import kaiyrzhan.de.core.preview.AuthQualifier
-import kotlinx.serialization.json.Json
-import okhttp3.MediaType.Companion.toMediaType
+import kaiyrzhan.de.core.token.mapper.TokenMapper
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import org.koin.core.qualifier.named
+import org.koin.dsl.bind
+import org.koin.dsl.module
+import retrofit2.Converter.Factory
 import retrofit2.Retrofit
 import java.util.concurrent.TimeUnit
-import javax.inject.Singleton
-
-@Module
-@InstallIn(SingletonComponent::class)
-object TokenModule {
 
 
-    @Singleton
-    @Provides
-    @AuthQualifier
-    fun provideAuthRetrofit(okHttpClient: OkHttpClient): Retrofit {
-        val jsonConverterFactory = Json.asConverterFactory("application/json".toMediaType())
-        return Retrofit.Builder()
-            .baseUrl(NetworkModule.BASE_URL)
-            .addCallAdapterFactory(ResultCallAdapterFactory.create())
-            .addConverterFactory(jsonConverterFactory)
-            .client(okHttpClient)
-            .build()
-    }
+private const val TOKEN_MODULE = "tokenModule"
 
-    @Singleton
-    @Provides
-    @AuthQualifier
-    fun provideAuthOkHttpClient(): OkHttpClient {
-        return OkHttpClient.Builder()
+val tokenModule = module {
+
+    single(named(TOKEN_MODULE)) {
+        OkHttpClient.Builder()
             .addInterceptor(HttpLoggingInterceptor().apply {
                 level = HttpLoggingInterceptor.Level.BODY
             })
@@ -49,11 +29,23 @@ object TokenModule {
             .build()
     }
 
-    @Provides
-    @Singleton
-    @AuthQualifier
-    fun provideTokenApi(retrofit: Retrofit): TokenApi {
-        return retrofit.create(TokenApi::class.java)
-    }
+    single(named(TOKEN_MODULE)) {
+        Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .addCallAdapterFactory(ResultCallAdapterFactory.create())
+            .addConverterFactory(get<Factory>())
+            .client(get<OkHttpClient>(named(TOKEN_MODULE)))
+            .build()
+    } bind Retrofit::class
+
+    factory { TokenMapper() } bind TokenMapper::class
+
+    single(named(TOKEN_MODULE)) {
+        get<Retrofit>(named(TOKEN_MODULE)).create(TokenApi::class.java)
+    } bind TokenApi::class
+
+    single { TokenAuthenticator(get()) } bind TokenAuthenticator::class
+
+    single { TokenInterceptor(get()) } bind TokenInterceptor::class
 
 }

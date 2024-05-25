@@ -1,16 +1,30 @@
 package kaiyrzhan.de.empath.app
 
 import android.app.Application
-import cafe.adriel.voyager.core.registry.ScreenRegistry
-import dagger.hilt.android.HiltAndroidApp
-import kaiyrzhan.de.auth.featureAuthScreenModule
+import kaiyrzhan.de.auth.authApiModule
+import kaiyrzhan.de.core.network.networkModule
+import kaiyrzhan.de.core.shared_preferences.sharedPreferencesModule
+import kaiyrzhan.de.core.token.tokenModule
+import kaiyrzhan.de.utils.dispatcher.dispatchersModule
+import kaiyrzhan.de.utils.utilsModule
+import org.koin.android.ext.koin.androidContext
+import org.koin.core.context.startKoin
 
-@HiltAndroidApp
 class App : Application() {
+
     override fun onCreate() {
         super.onCreate()
-        ScreenRegistry {
-            featureAuthScreenModule()
+        startKoin {
+            androidContext(this@App)
+            modules(
+                tokenModule,
+                sharedPreferencesModule,
+                networkModule,
+                authApiModule,
+                utilsModule,
+                dispatchersModule,
+            )
         }
     }
+
 }

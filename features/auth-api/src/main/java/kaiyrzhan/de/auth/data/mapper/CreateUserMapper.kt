@@ -3,9 +3,8 @@ package kaiyrzhan.de.auth.data.mapper
 import kaiyrzhan.de.auth.data.models.CreateUserRequest
 import kaiyrzhan.de.auth.domain.models.CreateUser
 import kaiyrzhan.de.core.preview.Mapper
-import javax.inject.Inject
 
-class CreateUserMapper @Inject constructor() : Mapper<CreateUser, CreateUserRequest> {
+class CreateUserMapper : Mapper<CreateUser, CreateUserRequest> {
 
     override fun toDomain(data: CreateUserRequest): CreateUser =
         CreateUser(

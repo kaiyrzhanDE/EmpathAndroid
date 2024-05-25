@@ -4,7 +4,6 @@ import android.content.Context
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kaiyrzhan.de.core.image_picker.model.ActionType
 import kaiyrzhan.de.core.image_picker.model.Image
 import kotlinx.coroutines.channels.Channel
@@ -14,10 +13,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-@HiltViewModel
-class ImagePickerViewModel @Inject constructor() : ViewModel() {
+class ImagePickerViewModel : ViewModel() {
 
     private val _screenStateFlow: MutableStateFlow<ImagePickerState> =
         MutableStateFlow(ImagePickerState.None)
