@@ -1,6 +1,5 @@
 plugins {
-    id("convention.uiModule")
-    alias(libs.plugins.org.jetbrains.kotlin.plugin.serialization)
+    id("empath.ui")
 }
 
 android {
@@ -8,5 +7,5 @@ android {
 }
 
 dependencies{
-    api(project(":features:auth-ui"))
+    api(projects.features.authUi)
 }

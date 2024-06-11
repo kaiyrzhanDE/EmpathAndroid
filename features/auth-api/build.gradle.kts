@@ -1,6 +1,5 @@
 plugins {
-    id("convention.dataModule")
-    alias(libs.plugins.org.jetbrains.kotlin.plugin.serialization)
+    id("empath.data")
 }
 
 android {
@@ -8,5 +7,5 @@ android {
 }
 
 dependencies {
-    api(project(":base:data"))
+   api(projects.base.data)
 }

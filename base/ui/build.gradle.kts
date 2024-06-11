@@ -1,10 +1,11 @@
 plugins {
-    id("convention.uiModule")
+    id("empath.ui")
 }
 
 android {
     namespace = "kaiyrzhan.de.core_ui"
 }
+
 dependencies {
-    api(project(":base:utils"))
+    api(projects.base.utils)
 }

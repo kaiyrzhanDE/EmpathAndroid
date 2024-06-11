@@ -1,12 +1,11 @@
 plugins {
-    id("convention.appModule")
-    alias(libs.plugins.org.jetbrains.kotlin.plugin.serialization)
+    id("empath.app")
 }
 
 dependencies {
-    implementation(project(":base:data"))
-    implementation(project(":features:root"))
-    implementation(project(":features:auth-api"))
-    implementation(project(":base:ui"))
+    implementation(projects.base.data)
+    implementation(projects.base.ui)
+    implementation(projects.features.root)
+    implementation(projects.features.authApi)
 }
 

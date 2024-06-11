@@ -22,34 +22,24 @@ dependencies {
 
 gradlePlugin {
     plugins {
-        register("dataModule") {
-            id = "convention.dataModule"
-            implementationClass = "plugins.DataModulePlugin"
+        register("data") {
+            id = "empath.data"
+            implementationClass = "plugins.Data"
         }
 
-        register("featureModule") {
-            id = "convention.featureModule"
-            implementationClass = "plugins.FeatureModulePlugin"
+        register("ui") {
+            id = "empath.ui"
+            implementationClass = "plugins.Ui"
         }
 
-        register("uiModule") {
-            id = "convention.uiModule"
-            implementationClass = "plugins.UiModulePlugin"
+        register("app") {
+            id = "empath.app"
+            implementationClass = "plugins.App"
         }
 
-        register("appModule") {
-            id = "convention.appModule"
-            implementationClass = "plugins.AppModulePlugin"
-        }
-
-        register("navigationModule"){
-            id = "convention.navigationModule"
-            implementationClass = "plugins.NavigationModulePlugin"
-        }
-
-        register("libraryModule"){
-            id = "convention.libraryModule"
-            implementationClass = "plugins.LibraryModulePlugin"
+        register("utils"){
+            id = "empath.utils"
+            implementationClass = "plugins.Utils"
         }
 
     }
