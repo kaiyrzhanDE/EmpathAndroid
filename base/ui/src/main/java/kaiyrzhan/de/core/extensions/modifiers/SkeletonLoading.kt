@@ -45,7 +45,7 @@ fun Modifier.skeletonLoading(
             )
 
             val transition =
-                rememberInfiniteTransition(label = stringResource(id = R.string.loading))
+                rememberInfiniteTransition(label = "SkeletonLoading")
 
             val translateAnimation = transition.animateFloat(
                 initialValue = 0f,
@@ -57,7 +57,7 @@ fun Modifier.skeletonLoading(
                     ),
                     repeatMode = RepeatMode.Restart,
                 ),
-                label = stringResource(id = R.string.loading),
+                label = "SkeletonLoading",
             )
 
             this.background(

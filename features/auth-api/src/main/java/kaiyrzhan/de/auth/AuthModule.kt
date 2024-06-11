@@ -10,6 +10,8 @@ import kaiyrzhan.de.auth.data.repository.AuthRepositoryImpl
 import kaiyrzhan.de.auth.domain.repository.AuthRepository
 import kaiyrzhan.de.auth.domain.usecase.LoginUseCase
 import kaiyrzhan.de.auth.domain.usecase.RegisterUserUseCase
+import kaiyrzhan.de.auth.domain.usecase.SendEmailCodeUseCase
+import kaiyrzhan.de.auth.domain.usecase.VerifyEmailUseCase
 import kaiyrzhan.de.core.token.mapper.TokenMapper
 import org.koin.dsl.bind
 import org.koin.dsl.module
@@ -37,4 +39,6 @@ val authApiModule = module(createdAtStart = true) {
 
     single { LoginUseCase(repository = get()) }
     single { RegisterUserUseCase(repository = get()) }
+    single { SendEmailCodeUseCase(repository = get()) }
+    single { VerifyEmailUseCase(repository = get()) }
 }

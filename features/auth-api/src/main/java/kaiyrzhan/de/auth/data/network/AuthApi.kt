@@ -20,7 +20,7 @@ interface AuthApi {
     @PATCH("/api_v1/auth/users/reset_password")
     fun resetPassword(@Body body: ResetPasswordRequest): Result<UserRequest>
 
-    @POST("/api_v1/auth/users/email/send_code")
+    @POST("/api_v1/auth/email")
     fun sendEmailCode(@Query("email_in") email: String): Result<Unit>
 
     @POST("/api_v1/auth/users/email/verify")

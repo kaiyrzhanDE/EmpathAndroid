@@ -34,7 +34,7 @@ internal fun CameraCard(
                 .weight(1f)
                 .padding(30.dp),
             painter = painterResource(id = R.drawable.ic_add_a_photo),
-            contentDescription = stringResource(id = R.string.camera),
+            contentDescription = "Camera",
             tint = Peach,
         )
     }

@@ -14,6 +14,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -25,6 +26,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import kaiyrzhan.de.auth.components.CustomTextField
 import kaiyrzhan.de.auth.login.dialog.PasswordTipsDialog
@@ -59,9 +62,9 @@ fun LoginContent(component: LoginComponent) {
                 ErrorDialog(
                     icon = R.drawable.ic_attention,
                     title = when (state.errorDialogState.code) {
-                        400 -> kaiyrzhan.de.core_ui.R.string.incorrect_user_credentials_message
-                        429 -> kaiyrzhan.de.core_ui.R.string.too_many_login_requests_message
-                        else -> kaiyrzhan.de.core_ui.R.string.oops_something_be_wrong_message
+                        400 -> R.string.incorrect_user_credentials_message
+                        429 -> R.string.too_many_login_requests_message
+                        else -> R.string.oops_something_be_wrong_message
                     },
                     onDismissRequest = { component.showErrorDialog(false) },
                 )
@@ -91,16 +94,18 @@ fun LoginContent(component: LoginComponent) {
                         onValueChange = component::onEmailChanged,
                         placeholder = stringResource(id = R.string.enter_login),
                         painter = painterResource(id = R.drawable.ic_email),
-                        contentDescription = stringResource(id = R.string.email)
+                        contentDescription = stringResource(id = R.string.email),
                     )
                     Spacer(modifier = Modifier.height(20.dp))
                     Password(
                         value = state.password,
                         onValueChange = component::onPasswordChanged,
                         placeholder = stringResource(id = R.string.enter_password),
-                        painter = painterResource(id = R.drawable.ic_key),
-                        contentDescription = stringResource(id = R.string.email),
+                        painter = painterResource(id = if (state.isPasswordVisible) R.drawable.ic_visibility_off else R.drawable.ic_visibility),
+                        contentDescription = stringResource(id = R.string.show_password),
+                        visualTransformation = if (state.isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                         onResetPasswordClicked = component::onResetPasswordClicked,
+                        onIconClicked = component::onPasswordShowClicked,
                     )
                     Spacer(modifier = Modifier.weight(1f))
                     UserActions(
@@ -163,6 +168,8 @@ private fun ColumnScope.Password(
     painter: Painter,
     contentDescription: String,
     onResetPasswordClicked: () -> Unit,
+    onIconClicked: () -> Unit,
+    visualTransformation: VisualTransformation,
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -190,11 +197,14 @@ private fun ColumnScope.Password(
                 style = MaterialTheme.typography.bodySmall
             )
         },
+        visualTransformation = visualTransformation,
         trailingIcon = {
-            Icon(
-                painter = painter,
-                contentDescription = contentDescription,
-            )
+            IconButton(onClick = onIconClicked) {
+                Icon(
+                    painter = painter,
+                    contentDescription = contentDescription,
+                )
+            }
         }
     )
 }

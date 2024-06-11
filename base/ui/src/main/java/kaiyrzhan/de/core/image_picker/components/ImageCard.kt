@@ -88,7 +88,7 @@ internal fun ImageCard(
                     imagePosition = image.selectedPosition,
                 ) else R.drawable.ic_not_selected_circle
             ),
-            contentDescription = stringResource(id = if (image.isSelected) R.string.selected else R.string.not_selected)
+            contentDescription =  if (image.isSelected) "Selected" else "Not selected"
         )
     }
 }

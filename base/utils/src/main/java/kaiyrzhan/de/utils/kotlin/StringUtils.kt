@@ -7,3 +7,5 @@ fun String?.isNotNullAndEmpty(): Boolean{
 fun String?.isNotBlankAndNull(): Boolean{
     return !this.isNullOrBlank()
 }
+
+const val STRING_EMPTY = ""

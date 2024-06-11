@@ -1,9 +1,9 @@
 package kaiyrzhan.de.auth.login
 
-import kaiyrzhan.de.auth.login.model.LoginAction
+import com.arkivanov.decompose.router.slot.ChildSlot
+import com.arkivanov.decompose.value.Value
+import kaiyrzhan.de.auth.dialog.MessageDialogComponent
 import kaiyrzhan.de.auth.login.model.LoginState
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 
 interface LoginComponent {
@@ -15,6 +15,7 @@ interface LoginComponent {
     fun onLoginClicked()
     fun onPrivacyClicked()
     fun onResetPasswordClicked()
+    fun onPasswordShowClicked()
     fun onRegistrationClicked()
     fun onGoogleAuthClicked()
     fun onFacebookAuthClicked()

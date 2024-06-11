@@ -81,7 +81,7 @@ fun CircleLoading(
         }
     }
 
-    val transition = rememberInfiniteTransition(label = stringResource(id = R.string.loading))
+    val transition = rememberInfiniteTransition(label = "CircleLoading")
     val spinAngel by transition.animateFloat(
         initialValue = 0f,
         targetValue = 360f,
@@ -92,7 +92,7 @@ fun CircleLoading(
             ),
             repeatMode = RepeatMode.Restart
         ),
-        label = stringResource(id = R.string.loading)
+        label = "CircleLoading"
     )
 
     Canvas(

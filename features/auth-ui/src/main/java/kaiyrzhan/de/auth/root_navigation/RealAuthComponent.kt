@@ -1,12 +1,16 @@
 package kaiyrzhan.de.auth.root_navigation
 
 import com.arkivanov.decompose.ComponentContext
+import com.arkivanov.decompose.ExperimentalDecomposeApi
 import com.arkivanov.decompose.router.stack.ChildStack
 import com.arkivanov.decompose.router.stack.StackNavigation
 import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.router.stack.pop
 import com.arkivanov.decompose.router.stack.popWhile
 import com.arkivanov.decompose.router.stack.push
+import com.arkivanov.decompose.router.stack.pushNew
+import com.arkivanov.decompose.router.stack.replaceAll
+import com.arkivanov.decompose.router.stack.replaceCurrent
 import com.arkivanov.decompose.value.Value
 import kaiyrzhan.de.auth.login.RealLoginComponent
 import kaiyrzhan.de.auth.privacy.RealPrivacyComponent
@@ -35,6 +39,7 @@ class RealAuthComponent(
 
     override fun onBackClicked() = navigation.pop()
 
+    @OptIn(ExperimentalDecomposeApi::class)
     private fun createChild(
         config: Config,
         componentContext: ComponentContext
@@ -72,7 +77,10 @@ class RealAuthComponent(
             )
 
             is Config.Privacy -> AuthComponent.Child.Privacy(
-                RealPrivacyComponent(componentContext)
+                RealPrivacyComponent(
+                    componentContext = componentContext,
+                    onBackChosen = ::onBackClicked
+                )
             )
 
             is Config.EntryCode -> AuthComponent.Child.EntryCode(
@@ -80,6 +88,7 @@ class RealAuthComponent(
                     componentContext = componentContext,
                     coroutineContext = coroutineContext,
                     toolbarState = config.toolbarState,
+                    email = config.email,
                     onBackChosen = ::onBackClicked,
                     onRegistrationChosen = {
                         navigation.push(Config.CreateAccount)
@@ -96,9 +105,12 @@ class RealAuthComponent(
                     coroutineContext = coroutineContext,
                     toolbarState = config.toolbarState,
                     onBackChosen = ::onBackClicked,
-                    onSendEmailChosen = {
-                        navigation.push(Config.EntryCode(config.toolbarState))
+                    onSendEmailChosen = { email ->
+                        navigation.push(Config.EntryCode(config.toolbarState, email))
                     },
+                    onResetPasswordChosen = {
+                        navigation.push(Config.ResetPassword)
+                    }
                 )
             )
 
@@ -127,7 +139,10 @@ class RealAuthComponent(
         data object CreateAccount : Config
 
         @Serializable
-        data class EntryCode(val toolbarState: ToolbarState) : Config
+        data class EntryCode(
+            val toolbarState: ToolbarState,
+            val email: String,
+        ) : Config
 
         @Serializable
         data class EntryEmail(val toolbarState: ToolbarState) : Config

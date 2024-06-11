@@ -1,13 +1,12 @@
 package plugins
 
-import com.android.build.api.dsl.LibraryExtension
+import com.android.build.gradle.LibraryExtension
 import extensions.configureDI
 import extensions.configureLibraryAndroid
-import extensions.configureNetwork
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 
-class DataModulePlugin : Plugin<Project> {
+class Utils : Plugin<Project> {
     override fun apply(target: Project) = with(target) {
         with(pluginManager) {
             apply("com.android.library")
@@ -15,6 +14,5 @@ class DataModulePlugin : Plugin<Project> {
         }
         configureLibraryAndroid()
         configureDI<LibraryExtension>()
-        configureNetwork()
     }
 }

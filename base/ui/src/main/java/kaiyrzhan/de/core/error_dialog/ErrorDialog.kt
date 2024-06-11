@@ -17,7 +17,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import kaiyrzhan.de.core_ui.R
 
 @Composable
 fun ErrorDialog(
@@ -53,7 +52,7 @@ fun ErrorDialog(
             ) {
                 Text(
                     modifier = Modifier.padding(horizontal = 30.dp),
-                    text = stringResource(id = R.string.okay).uppercase(),
+                    text = "Okay",
                     style = MaterialTheme.typography.titleSmall,
                 )
             }

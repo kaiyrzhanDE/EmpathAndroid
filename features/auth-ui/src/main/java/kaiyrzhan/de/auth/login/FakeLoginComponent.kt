@@ -1,12 +1,8 @@
 package kaiyrzhan.de.auth.login
 
-import kaiyrzhan.de.auth.login.model.LoginAction
 import kaiyrzhan.de.auth.login.model.LoginState
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.receiveAsFlow
 
 class FakeLoginComponent : LoginComponent {
     override val screenStateFlow: StateFlow<LoginState> = MutableStateFlow(LoginState.Login())
@@ -15,6 +11,7 @@ class FakeLoginComponent : LoginComponent {
     override fun onPasswordChanged(password: String?) = Unit
 
     override fun onLoginClicked() = Unit
+    override fun onPasswordShowClicked() = Unit
     override fun onPrivacyClicked() = Unit
     override fun onResetPasswordClicked() = Unit
     override fun onRegistrationClicked() = Unit

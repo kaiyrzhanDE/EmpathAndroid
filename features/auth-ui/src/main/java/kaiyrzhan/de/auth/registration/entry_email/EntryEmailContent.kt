@@ -25,8 +25,10 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.arkivanov.decompose.extensions.compose.jetpack.subscribeAsState
 import kaiyrzhan.de.auth.components.CustomTextField
 import kaiyrzhan.de.auth.components.IconWithDescription
+import kaiyrzhan.de.auth.dialog.MessageDialogContent
 import kaiyrzhan.de.auth.registration.entry_email.model.EntryEmailState
 import kaiyrzhan.de.core.components.ToolbarText
 import kaiyrzhan.de.auth.model.ToolbarState
@@ -40,6 +42,12 @@ internal fun EntryEmailContent(
     component: EntryEmailComponent,
 ) {
     val screenState = component.screenStateFlow.collectAsState()
+
+    val messageDialogSlot = component.messageDialog.subscribeAsState()
+
+    messageDialogSlot.value.child?.instance?.also { childComponent ->
+        MessageDialogContent(component = childComponent)
+    }
 
     when (val state = screenState.value) {
         is EntryEmailState.None -> {}
@@ -92,7 +100,7 @@ internal fun EntryEmailContent(
                     )
                     Spacer(modifier = Modifier.height(20.dp))
                     Button(
-                        onClick = component::onSendEmailClicked,
+                        onClick = { component.onSendEmailClicked(state.toolbarState) },
                         shape = RoundedCornerShape(10.dp),
                     ) {
                         Text(
@@ -143,9 +151,7 @@ private fun ColumnScope.Email(
 @Composable
 private fun Preview() {
     PreviewTheme {
-        EntryEmailContent(
-            component = FakeEntryEmailComponent(),
-        )
+        EntryEmailContent(FakeEntryEmailComponent())
     }
 }
 

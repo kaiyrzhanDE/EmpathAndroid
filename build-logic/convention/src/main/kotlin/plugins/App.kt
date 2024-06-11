@@ -11,15 +11,15 @@ import extensions.configureNetwork
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
-import utils.getVersion
 
 @Suppress("UnstableApiUsage")
-class AppModulePlugin : Plugin<Project> {
+class App : Plugin<Project> {
     override fun apply(project: Project) {
         with(project) {
             with(pluginManager) {
                 apply("com.android.application")
                 apply("org.jetbrains.kotlin.android")
+                apply("org.jetbrains.kotlin.plugin.serialization")
             }
             extensions.configure<BaseAppModuleExtension> {
                 defaultConfig.apply {

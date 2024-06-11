@@ -8,6 +8,7 @@ sealed class LoginState {
     data class Login(
         val email: String = "",
         val password: String = "",
+        val isPasswordVisible: Boolean = false,
         val errorDialogState: ErrorDialogState = ErrorDialogState(),
         val isPasswordTipsDialogVisible: Boolean = false,
     ) : LoginState()

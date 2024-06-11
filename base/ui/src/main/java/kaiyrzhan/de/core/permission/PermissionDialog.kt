@@ -134,7 +134,7 @@ fun PermissionDialog(
                 Spacer(modifier = Modifier.width(20.dp))
                 TextButton(onClick = onAcceptRequest) {
                     Text(
-                        text = stringResource(id = R.string.settings),
+                        text = "Settings",
                         style = MaterialTheme.typography.titleMedium,
                         color = MaterialTheme.colorScheme.onBackground,
                     )

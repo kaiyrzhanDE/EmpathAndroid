@@ -2,26 +2,14 @@
 
     <string name="app_name">Em-path</string>
     <string name="authors">Created by _</string>
-    <string name="loading">Loading</string>
 
-    <string name="settings">Settings</string>
-    <string name="later">Later</string>
+<!--    Permission dialog-->
     <string name="audio_file">Audio file</string>
     <string name="document">Document</string>
     <string name="video_file">Video file</string>
     <string name="file">File</string>
     <string name="folder">Folder</string>
-    <string name="error">Error</string>
+    <string name="settings">Settings</string>
+    <string name="later">later</string>
     <string name="description_for_files_permission">App needs access to your storage to send and receive photos, videos,  music, and other media files. This ensures a smooth content exchange and  enhances your user experience.</string>
-    <string name="oops_something_be_wrong_message">Oops! Something be wrong</string>
-    <string name="incorrect_user_credentials_message">Incorrect user credentials</string>
-    <string name="too_many_login_requests_message">The number of login attempts has been exceeded. Try again in 30 minutes.</string>
-    <string name="camera">Camera</string>
-    <string name="send">Send</string>
-    <string name="selected" tools:ignore="PrivateResource">Selected</string>
-    <string name="not_selected" tools:ignore="PrivateResource">Not selected</string>
-    <string name="cancel">Cancel</string>
-    <string name="back">Back</string>
-    <string name="okay">Okay</string>
-
 </resources>

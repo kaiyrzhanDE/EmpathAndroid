@@ -26,13 +26,7 @@ class RealLoginComponent(
     private val loginUseCase: LoginUseCase by inject()
     private val saveTokenUseCase: SaveTokenUseCase by inject()
 
-    companion object {
-        private val PasswordRegex =
-            Regex("^(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z!@#$%^&*]{6,128}$")
-    }
-
     private val scope = coroutineScope(coroutineContext + SupervisorJob())
-
     override val screenStateFlow = MutableStateFlow(LoginState.Login())
 
     override fun onEmailChanged(email: String?) =
@@ -61,6 +55,9 @@ class RealLoginComponent(
         }
     }
 
+    override fun onPasswordShowClicked() =
+        screenStateFlow.update { state -> state.copy(isPasswordVisible = !state.isPasswordVisible) }
+
     override fun onPrivacyClicked() {
         onPrivacyChosen()
     }
@@ -87,11 +84,13 @@ class RealLoginComponent(
     override fun showErrorDialog(isVisible: Boolean, code: Int?) {
         screenStateFlow.update { state ->
             state.copy(
-                errorDialogState = state.errorDialogState.copy(
-                    code = code,
-                    isVisible = isVisible,
-                )
+                errorDialogState = state.errorDialogState.copy(code = code, isVisible = isVisible)
             )
         }
+    }
+
+    companion object {
+        private val PasswordRegex =
+            Regex("^(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z!@#$%^&*]{6,128}$")
     }
 }
