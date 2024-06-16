@@ -40,17 +40,17 @@ class RealEntryCodeComponent(
 
     override fun onCheckCodeClicked() {
         scope.launch {
-            verifyEmailUseCase.invoke(email, screenStateFlow.value.code)
-                .onSuccess {
+//            verifyEmailUseCase.invoke(email, screenStateFlow.value.code)
+//                .onSuccess {
                     when (toolbarState) {
                         ToolbarState.REGISTRATION -> onRegistrationChosen()
                         ToolbarState.RESET_PASSWORD -> onResetPasswordChosen()
                     }
-                }.onError { code, _ ->
-                    when(code){
-                        //TODO()
-                    }
-                }
+//                }.onError { code, _ ->
+//                    when(code){
+//                        //TODO()
+//                    }
+//                }
         }
     }
 

@@ -8,6 +8,7 @@ import kaiyrzhan.de.auth.privacy.PrivacyComponent
 import kaiyrzhan.de.auth.registration.create_account.CreateAccountComponent
 import kaiyrzhan.de.auth.registration.entry_code.EntryCodeComponent
 import kaiyrzhan.de.auth.registration.entry_email.EntryEmailComponent
+import kaiyrzhan.de.auth.registration.optional_info.OptionalComponent
 import kaiyrzhan.de.auth.registration.reset_password.ResetPasswordComponent
 
 interface AuthComponent: BackHandlerOwner {
@@ -22,5 +23,6 @@ interface AuthComponent: BackHandlerOwner {
         class EntryCode(val component: EntryCodeComponent) : Child
         class EntryEmail(val component: EntryEmailComponent) : Child
         class ResetPassword(val component: ResetPasswordComponent) : Child
+        class Optional(val component: OptionalComponent) : Child
     }
 }

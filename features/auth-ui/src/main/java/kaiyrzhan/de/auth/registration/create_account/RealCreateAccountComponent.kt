@@ -14,6 +14,7 @@ class RealCreateAccountComponent(
     componentContext: ComponentContext,
     coroutineContext: CoroutineContext,
     private val onBackChosen: () -> Unit,
+    private val onCreateAccountChosen: () -> Unit,
 ) : ComponentContext by componentContext, CreateAccountComponent {
     private val scope = coroutineScope(coroutineContext + SupervisorJob())
 
@@ -40,6 +41,7 @@ class RealCreateAccountComponent(
     override fun onCreateAccountClicked() {
         scope.launch {
             //TODO request to creating account
+            onCreateAccountChosen()
         }
     }
 

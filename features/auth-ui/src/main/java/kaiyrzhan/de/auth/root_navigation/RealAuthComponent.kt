@@ -8,9 +8,6 @@ import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.router.stack.pop
 import com.arkivanov.decompose.router.stack.popWhile
 import com.arkivanov.decompose.router.stack.push
-import com.arkivanov.decompose.router.stack.pushNew
-import com.arkivanov.decompose.router.stack.replaceAll
-import com.arkivanov.decompose.router.stack.replaceCurrent
 import com.arkivanov.decompose.value.Value
 import kaiyrzhan.de.auth.login.RealLoginComponent
 import kaiyrzhan.de.auth.privacy.RealPrivacyComponent
@@ -19,6 +16,7 @@ import kaiyrzhan.de.auth.registration.entry_code.RealEntryCodeComponent
 import kaiyrzhan.de.auth.registration.entry_email.RealEntryEmailComponent
 import kaiyrzhan.de.auth.registration.reset_password.RealResetPasswordComponent
 import kaiyrzhan.de.auth.model.ToolbarState
+import kaiyrzhan.de.auth.registration.optional_info.RealOptionalComponent
 import kotlinx.serialization.Serializable
 import kotlin.coroutines.CoroutineContext
 
@@ -39,7 +37,6 @@ class RealAuthComponent(
 
     override fun onBackClicked() = navigation.pop()
 
-    @OptIn(ExperimentalDecomposeApi::class)
     private fun createChild(
         config: Config,
         componentContext: ComponentContext
@@ -68,6 +65,9 @@ class RealAuthComponent(
                 RealCreateAccountComponent(
                     componentContext = componentContext,
                     coroutineContext = coroutineContext,
+                    onCreateAccountChosen = {
+                        navigation.push(Config.Optional)
+                    },
                     onBackChosen = {
                         navigation.popWhile { topOfStack ->
                             topOfStack !is Config.EntryEmail
@@ -125,6 +125,12 @@ class RealAuthComponent(
                     },
                 )
             )
+
+            is Config.Optional -> AuthComponent.Child.Optional(
+                RealOptionalComponent(
+                    componentContext = componentContext,
+                )
+            )
         }
 
     @Serializable
@@ -149,5 +155,8 @@ class RealAuthComponent(
 
         @Serializable
         data object ResetPassword : Config
+
+        @Serializable
+        data object Optional : Config
     }
 }

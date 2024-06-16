@@ -31,6 +31,7 @@
     <string name="hide_password">Hide password</string>
     <string name="cancel">Cancel</string>
     <string name="back">Back</string>
+    <string name="skip">Skip</string>
     <string name="audio_file">Audio file</string>
     <string name="document">Document</string>
     <string name="video_file">Video file</string>
@@ -62,5 +63,16 @@
     <string name="abort_registration_warning">Are you sure you want to cancel the registration? If not, the account will not be created.</string>
     <string name="abort_password_recovery">Abort password recovery</string>
     <string name="abort_password_recovery_warning">Do you really want to interrupt the password recovery process?</string>
+    <string name="optional">Optional</string>
+    <string name="photo">Photo</string>
+    <string name="option_info_description">Please note that you can modify this information at any time.</string>
+    <string name="first_name">First name</string>
+    <string name="enter_first_name">Enter first name</string>
+    <string name="last_name">Last name</string>
+    <string name="enter_last_name">Enter last name</string>
+    <string name="date_placeholder">00/00/0000</string>
+    <string name="date_of_birth">Date of birth</string>
+    <string name="gender">Gender</string>
+    <string name="save">Save</string>
 
 </resources>
