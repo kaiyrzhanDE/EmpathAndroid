@@ -1,4 +1,4 @@
-package kaiyrzhan.de.core.image_picker
+package kaiyrzhan.de.core.image_picker.utils
 
 import android.content.Context
 import android.content.ContentUris
