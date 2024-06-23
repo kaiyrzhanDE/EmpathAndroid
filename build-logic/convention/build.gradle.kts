@@ -42,5 +42,9 @@ gradlePlugin {
             implementationClass = "plugins.Utils"
         }
 
+        register("lib"){
+            id = "empath.lib"
+            implementationClass = "plugins.LibraryKotlin"
+        }
     }
 }

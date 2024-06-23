@@ -1,4 +1,4 @@
-package kaiyrzhan.de.auth.login.dialog
+package kaiyrzhan.de.auth.dialog.password_tips_dialog
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -9,13 +9,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -37,13 +35,13 @@ import kaiyrzhan.de.feature_auth.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PasswordTipsDialog(
-    onDismissRequest: () -> Unit,
-    sheetState: SheetState,
+fun PasswordTipsContent(
+    component: PasswordTipsComponent,
 ) {
+    val sheetState = rememberModalBottomSheetState()
     ModalBottomSheet(
         sheetState = sheetState,
-        onDismissRequest = onDismissRequest,
+        onDismissRequest = component::onDismissClicked,
         dragHandle = {},
         shape = RoundedCornerShape(topStart = 10.dp, topEnd = 10.dp),
     ) {
@@ -62,7 +60,7 @@ fun PasswordTipsDialog(
                     style = MaterialTheme.typography.titleMedium,
                     textAlign = TextAlign.Center,
                 )
-                IconButton(onClick = onDismissRequest) {
+                IconButton(onClick = component::onDismissClicked) {
                     Image(
                         painter = painterResource(id = R.drawable.ic_cancel),
                         contentDescription = stringResource(id = R.string.cancel)
@@ -92,15 +90,10 @@ fun PasswordTipsDialog(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Previews
 @Composable
-private fun Preview() {
-    val sheetState = rememberModalBottomSheetState()
-    PreviewTheme {
-        PasswordTipsDialog(
-            sheetState = sheetState,
-            onDismissRequest = {},
-        )
-    }
+private fun Preview() = PreviewTheme {
+    PasswordTipsContent(
+        component = FakePasswordTipsComponent()
+    )
 }

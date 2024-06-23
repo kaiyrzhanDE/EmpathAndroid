@@ -10,6 +10,7 @@ import com.arkivanov.decompose.extensions.compose.jetpack.stack.animation.predic
 import com.arkivanov.decompose.extensions.compose.jetpack.stack.animation.slide
 import com.arkivanov.decompose.extensions.compose.jetpack.stack.animation.stackAnimation
 import kaiyrzhan.de.auth.root_navigation.AuthContent
+import kaiyrzhan.de.root.main.MainContent
 
 @OptIn(ExperimentalDecomposeApi::class)
 @Composable
@@ -26,7 +27,14 @@ fun RootContent(component: RootComponent, modifier: Modifier) {
         Surface(modifier = Modifier.fillMaxSize()) {
             when (val child = it.instance) {
                 is RootComponent.Child.Auth -> AuthContent(
-                    child.component, Modifier.fillMaxSize())
+                    component = child.component,
+                    modifier = Modifier.fillMaxSize(),
+                )
+
+                is RootComponent.Child.Main -> MainContent(
+                    component = child.component,
+                    modifier = Modifier.fillMaxSize(),
+                )
             }
         }
     }

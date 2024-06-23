@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -18,23 +20,30 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
+import com.arkivanov.decompose.extensions.compose.jetpack.subscribeAsState
 import kaiyrzhan.de.auth.components.CustomTextField
-import kaiyrzhan.de.auth.login.dialog.PasswordTipsDialog
+import kaiyrzhan.de.auth.dialog.message_dialog.MessageDialogContent
+import kaiyrzhan.de.auth.dialog.password_tips_dialog.PasswordTipsComponent
+import kaiyrzhan.de.auth.dialog.password_tips_dialog.PasswordTipsContent
 import kaiyrzhan.de.auth.login.model.LoginState
+import kaiyrzhan.de.auth.registration.reset_password.ResetPasswordContent
 import kaiyrzhan.de.core.theme.*
 import kaiyrzhan.de.core.components.Logo
-import kaiyrzhan.de.core.error_dialog.ErrorDialog
 import kaiyrzhan.de.core.extensions.modifiers.noRippleClickable
 import kaiyrzhan.de.core.preview.PreviewTheme
 import kaiyrzhan.de.core.preview.Previews
@@ -46,8 +55,21 @@ import kaiyrzhan.de.utils.kotlin.isNotBlankAndNull
 @Composable
 fun LoginContent(component: LoginComponent) {
     val screenState = component.screenStateFlow.collectAsState()
+    val focusRequester = remember { FocusRequester() }
 
-    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = false)
+    val messageDialogSlot = component.messageDialog.subscribeAsState()
+    messageDialogSlot.value.child?.instance?.also { childComponent ->
+        MessageDialogContent(component = childComponent)
+    }
+
+    val passwordTipsSlot = component.passwordTipsDialog.subscribeAsState()
+    passwordTipsSlot.value.child?.instance?.also { childComponent ->
+        PasswordTipsContent(component = childComponent)
+    }
+
+
+
+
 
     when (val state = screenState.value) {
         is LoginState.None -> Unit
@@ -57,28 +79,7 @@ fun LoginContent(component: LoginComponent) {
         }
 
         is LoginState.Login -> {
-
-            if (state.errorDialogState.isVisible) {
-                ErrorDialog(
-                    icon = R.drawable.ic_attention,
-                    title = when (state.errorDialogState.code) {
-                        400 -> R.string.incorrect_user_credentials_message
-                        429 -> R.string.too_many_login_requests_message
-                        else -> R.string.oops_something_be_wrong_message
-                    },
-                    onDismissRequest = { component.showErrorDialog(false) },
-                )
-            }
-
-            if (state.isPasswordTipsDialogVisible) {
-                PasswordTipsDialog(
-                    sheetState = sheetState,
-                    onDismissRequest = { component.showPasswordTipsDialog(false) },
-                )
-            }
-
-            Scaffold(
-            ) { paddingValues ->
+            Scaffold { paddingValues ->
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
@@ -95,9 +96,11 @@ fun LoginContent(component: LoginComponent) {
                         placeholder = stringResource(id = R.string.enter_login),
                         painter = painterResource(id = R.drawable.ic_email),
                         contentDescription = stringResource(id = R.string.email),
+                        onDoneClicked = focusRequester::requestFocus
                     )
                     Spacer(modifier = Modifier.height(20.dp))
                     Password(
+                        modifier = Modifier.focusRequester(focusRequester),
                         value = state.password,
                         onValueChange = component::onPasswordChanged,
                         placeholder = stringResource(id = R.string.enter_password),
@@ -106,6 +109,7 @@ fun LoginContent(component: LoginComponent) {
                         visualTransformation = if (state.isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                         onResetPasswordClicked = component::onResetPasswordClicked,
                         onIconClicked = component::onPasswordShowClicked,
+                        onDoneClicked = component::onLoginClicked,
                     )
                     Spacer(modifier = Modifier.weight(1f))
                     UserActions(
@@ -134,6 +138,7 @@ private fun ColumnScope.Login(
     placeholder: String,
     painter: Painter,
     contentDescription: String,
+    onDoneClicked: () -> Unit,
 ) {
     Text(
         modifier = Modifier.align(Alignment.Start),
@@ -156,12 +161,20 @@ private fun ColumnScope.Login(
                 painter = painter,
                 contentDescription = contentDescription,
             )
-        }
+        },
+        keyboardOptions = KeyboardOptions.Default.copy(
+            keyboardType = KeyboardType.Email,
+            imeAction = ImeAction.Next,
+        ),
+        keyboardActions = KeyboardActions(
+            onNext = { onDoneClicked() }
+        ),
     )
 }
 
 @Composable
 private fun ColumnScope.Password(
+    modifier: Modifier = Modifier,
     value: String?,
     onValueChange: (String?) -> Unit,
     placeholder: String,
@@ -170,6 +183,7 @@ private fun ColumnScope.Password(
     onResetPasswordClicked: () -> Unit,
     onIconClicked: () -> Unit,
     visualTransformation: VisualTransformation,
+    onDoneClicked: () -> Unit,
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -183,14 +197,14 @@ private fun ColumnScope.Password(
             modifier = Modifier.noRippleClickable(onClick = onResetPasswordClicked),
             text = stringResource(id = R.string.reset_password),
             style = MaterialTheme.typography.bodySmall,
-            color = Peach,
+            color = Mustard,
         )
     }
     Spacer(modifier = Modifier.height(8.dp))
     CustomTextField(
         value = value.orEmpty(),
         onValueChange = { newValue -> onValueChange(newValue) },
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth(),
         placeholder = {
             Text(
                 text = placeholder,
@@ -205,7 +219,14 @@ private fun ColumnScope.Password(
                     contentDescription = contentDescription,
                 )
             }
-        }
+        },
+        keyboardOptions = KeyboardOptions.Default.copy(
+            imeAction = ImeAction.Go,
+            keyboardType = KeyboardType.Password,
+        ),
+        keyboardActions = KeyboardActions(
+            onGo = { onDoneClicked() }
+        ),
     )
 }
 
@@ -220,14 +241,14 @@ private fun ColumnScope.UserActions(
         modifier = Modifier.noRippleClickable(onClick = onRegistrationClicked),
         text = stringResource(id = R.string.create_account),
         style = MaterialTheme.typography.titleSmall,
-        color = Peach,
+        color = Mustard,
     )
     Spacer(modifier = Modifier.height(10.dp))
     Text(
         modifier = Modifier.noRippleClickable(onClick = onPrivacyClicked),
         text = stringResource(id = R.string.privacy),
         style = MaterialTheme.typography.titleSmall,
-        color = Peach,
+        color = Mustard,
     )
     Spacer(modifier = Modifier.height(20.dp))
     Button(
@@ -282,8 +303,6 @@ private fun ColumnScope.AlternativeAuth(
 
 @Previews
 @Composable
-private fun Preview() {
-    PreviewTheme {
-        LoginContent(FakeLoginComponent())
-    }
+private fun Preview() = PreviewTheme {
+    LoginContent(FakeLoginComponent())
 }

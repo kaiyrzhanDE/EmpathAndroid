@@ -1,4 +1,4 @@
-package kaiyrzhan.de.auth.dialog
+package kaiyrzhan.de.auth.dialog.message_dialog
 
 import kotlinx.coroutines.flow.MutableStateFlow
 

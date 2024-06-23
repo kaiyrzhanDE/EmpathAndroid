@@ -10,11 +10,12 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.dsl.bind
 import org.koin.dsl.module
+import retrofit2.CallAdapter
 import retrofit2.Converter.Factory
 import retrofit2.Retrofit
 import java.util.concurrent.TimeUnit
 
-internal const val BASE_URL = "http://192.168.1.227"
+internal const val BASE_URL = "http://192.168.1.236"
 
 val networkModule = module {
     single {
@@ -31,11 +32,12 @@ val networkModule = module {
     } bind OkHttpClient::class
 
     factory { Json.asConverterFactory("application/json".toMediaType()) } bind Factory::class
+    factory { ResultCallAdapterFactory.create() } bind CallAdapter.Factory::class
 
     single {
         Retrofit.Builder()
             .baseUrl(BASE_URL)
-            .addCallAdapterFactory(ResultCallAdapterFactory.create())
+            .addCallAdapterFactory(get<CallAdapter.Factory>())
             .addConverterFactory(get<Factory>())
             .client(get<OkHttpClient>())
             .build()

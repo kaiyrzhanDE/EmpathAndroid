@@ -160,8 +160,6 @@ private fun ColumnScope.TitledTextField(
 
 @Previews
 @Composable
-private fun Preview() {
-    PreviewTheme {
-        ResetPasswordContent(component = FakeResetPasswordComponent())
-    }
+private fun Preview() = PreviewTheme {
+    ResetPasswordContent(component = FakeResetPasswordComponent())
 }

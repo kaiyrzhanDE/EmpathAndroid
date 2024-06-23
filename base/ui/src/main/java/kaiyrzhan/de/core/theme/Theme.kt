@@ -84,11 +84,10 @@ private val LightColorScheme = lightColorScheme(
     surfaceDim = LIGHT_SURFACE_DIM
 )
 
-
 @Composable
 fun ApplicationTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
     val colorScheme = when {
         darkTheme -> DarkColorScheme

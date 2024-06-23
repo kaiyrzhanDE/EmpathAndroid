@@ -1,7 +1,8 @@
 package kaiyrzhan.de.auth.root_navigation
 
+import android.util.Log
 import com.arkivanov.decompose.ComponentContext
-import com.arkivanov.decompose.ExperimentalDecomposeApi
+
 import com.arkivanov.decompose.router.stack.ChildStack
 import com.arkivanov.decompose.router.stack.StackNavigation
 import com.arkivanov.decompose.router.stack.childStack
@@ -18,13 +19,11 @@ import kaiyrzhan.de.auth.registration.reset_password.RealResetPasswordComponent
 import kaiyrzhan.de.auth.model.ToolbarState
 import kaiyrzhan.de.auth.registration.optional_info.RealOptionalComponent
 import kotlinx.serialization.Serializable
-import kotlin.coroutines.CoroutineContext
 
 class RealAuthComponent(
     componentContext: ComponentContext,
-    private val coroutineContext: CoroutineContext,
+    private val onSuccessAuthentication: () -> Unit,
 ) : ComponentContext by componentContext, AuthComponent {
-
     private val navigation = StackNavigation<Config>()
 
     override val stack: Value<ChildStack<*, AuthComponent.Child>> = childStack(
@@ -39,13 +38,12 @@ class RealAuthComponent(
 
     private fun createChild(
         config: Config,
-        componentContext: ComponentContext
+        componentContext: ComponentContext,
     ): AuthComponent.Child =
         when (config) {
             is Config.Login -> AuthComponent.Child.Login(
                 RealLoginComponent(
                     componentContext = componentContext,
-                    coroutineContext = coroutineContext,
                     onResetPasswordChosen = {
                         navigation.push(Config.EntryEmail(ToolbarState.RESET_PASSWORD))
                     },
@@ -55,16 +53,13 @@ class RealAuthComponent(
                     onPrivacyChosen = {
                         navigation.push(Config.Privacy)
                     },
-                    onLoginSuccess = {
-                        //TODO(Navigate to main screen)
-                    }
+                    onLoginSuccess = onSuccessAuthentication,
                 )
             )
 
             is Config.CreateAccount -> AuthComponent.Child.CreateAccount(
                 RealCreateAccountComponent(
                     componentContext = componentContext,
-                    coroutineContext = coroutineContext,
                     onCreateAccountChosen = {
                         navigation.push(Config.Optional)
                     },
@@ -79,14 +74,13 @@ class RealAuthComponent(
             is Config.Privacy -> AuthComponent.Child.Privacy(
                 RealPrivacyComponent(
                     componentContext = componentContext,
-                    onBackChosen = ::onBackClicked
+                    onBackChosen = ::onBackClicked,
                 )
             )
 
             is Config.EntryCode -> AuthComponent.Child.EntryCode(
                 RealEntryCodeComponent(
                     componentContext = componentContext,
-                    coroutineContext = coroutineContext,
                     toolbarState = config.toolbarState,
                     email = config.email,
                     onBackChosen = ::onBackClicked,
@@ -102,7 +96,6 @@ class RealAuthComponent(
             is Config.EntryEmail -> AuthComponent.Child.EntryEmail(
                 RealEntryEmailComponent(
                     componentContext = componentContext,
-                    coroutineContext = coroutineContext,
                     toolbarState = config.toolbarState,
                     onBackChosen = ::onBackClicked,
                     onSendEmailChosen = { email ->
@@ -110,14 +103,13 @@ class RealAuthComponent(
                     },
                     onResetPasswordChosen = {
                         navigation.push(Config.ResetPassword)
-                    }
+                    },
                 )
             )
 
             is Config.ResetPassword -> AuthComponent.Child.ResetPassword(
                 RealResetPasswordComponent(
                     componentContext = componentContext,
-                    coroutineContext = coroutineContext,
                     onBackChosen = {
                         navigation.popWhile { topOfStack ->
                             topOfStack !is Config.EntryEmail
@@ -127,9 +119,7 @@ class RealAuthComponent(
             )
 
             is Config.Optional -> AuthComponent.Child.Optional(
-                RealOptionalComponent(
-                    componentContext = componentContext,
-                )
+                RealOptionalComponent(componentContext)
             )
         }
 

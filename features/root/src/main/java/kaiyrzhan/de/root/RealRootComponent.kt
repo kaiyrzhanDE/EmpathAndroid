@@ -5,15 +5,14 @@ import com.arkivanov.decompose.router.stack.ChildStack
 import com.arkivanov.decompose.router.stack.StackNavigation
 import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.router.stack.pop
-import com.arkivanov.decompose.router.stack.replaceAll
+import com.arkivanov.decompose.router.stack.push
 import com.arkivanov.decompose.value.Value
 import kaiyrzhan.de.auth.root_navigation.RealAuthComponent
+import kaiyrzhan.de.root.main.RealMainComponent
 import kotlinx.serialization.Serializable
-import kotlin.coroutines.CoroutineContext
 
-class DefaultRootComponent(
+class RealRootComponent(
     componentContext: ComponentContext,
-    private val coroutineContext: CoroutineContext,
 ) : ComponentContext by componentContext, RootComponent {
 
     private val navigation = StackNavigation<Config>()
@@ -24,10 +23,10 @@ class DefaultRootComponent(
             serializer = Config.serializer(),
             initialStack = { listOf(Config.Auth) },
             handleBackButton = true,
-            childFactory = ::createChild
+            childFactory = ::createChild,
         )
 
-    override fun onBackClicked() { navigation.pop() }
+    override fun onBackClicked() = navigation.pop()
 
     private fun createChild(
         config: Config,
@@ -37,7 +36,16 @@ class DefaultRootComponent(
             is Config.Auth -> RootComponent.Child.Auth(
                 RealAuthComponent(
                     componentContext = componentContext,
-                    coroutineContext = coroutineContext,
+                    onSuccessAuthentication = {
+                        navigation.push(Config.Main)
+                    },
+                )
+            )
+
+            is Config.Main -> RootComponent.Child.Main(
+                RealMainComponent(
+                    componentContext = componentContext,
+                    onBackChosen = ::onBackClicked,
                 )
             )
         }
@@ -47,6 +55,9 @@ class DefaultRootComponent(
 
         @Serializable
         data object Auth : Config
+
+        @Serializable
+        data object Main : Config
 
     }
 }

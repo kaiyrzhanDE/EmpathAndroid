@@ -33,7 +33,7 @@ val authApiModule = module(createdAtStart = true) {
             userMapper = get<UserMapper>(),
             tokenMapper = get<TokenMapper>(),
             resetPasswordMapper = get<ResetPasswordMapper>(),
-            verifyEmailMapper = get<VerifyEmailMapper>()
+            verifyEmailMapper = get<VerifyEmailMapper>(),
         )
     } bind AuthRepository::class
 

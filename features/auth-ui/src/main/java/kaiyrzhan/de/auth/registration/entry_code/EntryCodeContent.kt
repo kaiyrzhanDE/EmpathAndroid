@@ -108,8 +108,6 @@ private fun ColumnScope.Description() {
 
 @Previews
 @Composable
-private fun Preview() {
-    PreviewTheme {
-        EntryCodeContent(component = FakeEntryCodeComponent())
-    }
+private fun Preview() = PreviewTheme {
+    EntryCodeContent(component = FakeEntryCodeComponent())
 }

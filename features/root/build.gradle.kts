@@ -8,4 +8,5 @@ android {
 
 dependencies{
     api(projects.features.authUi)
+    implementation(projects.base.ui)
 }

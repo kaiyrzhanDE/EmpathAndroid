@@ -63,6 +63,10 @@
     <string name="abort_registration_warning">Are you sure you want to cancel the registration? If not, the account will not be created.</string>
     <string name="abort_password_recovery">Abort password recovery</string>
     <string name="abort_password_recovery_warning">Do you really want to interrupt the password recovery process?</string>
+    <string name="too_many_login_attempts">Too many login attempts!</string>
+    <string name="too_many_login_attempts_warning">It seems you\'ve made too many login attempts. Please wait 30 minutes and try again.</string>
+    <string name="too_many_verification_attempts">Too Many Verification Attempts!</string>
+    <string name="too_many_verification_attempts_warning">It seems you\'ve requested the verification code too many times. Please wait 5 minutes and try again.</string>
     <string name="optional">Optional</string>
     <string name="photo">Photo</string>
     <string name="option_info_description">Please note that you can modify this information at any time.</string>

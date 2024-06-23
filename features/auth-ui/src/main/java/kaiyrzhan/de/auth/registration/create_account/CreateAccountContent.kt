@@ -209,8 +209,6 @@ private fun ColumnScope.TitledTextField(
 
 @Previews
 @Composable
-private fun Preview() {
-    PreviewTheme {
-        CreateAccountContent(FakeCreateAccountComponent())
-    }
+private fun Preview() = PreviewTheme {
+    CreateAccountContent(FakeCreateAccountComponent())
 }

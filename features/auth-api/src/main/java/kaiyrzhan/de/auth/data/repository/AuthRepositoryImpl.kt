@@ -43,11 +43,11 @@ class AuthRepositoryImpl(
         return request.map { userMapper.toDomain(it) }
     }
 
-    override suspend fun sendEmailCode(email: String): RequestResult<Unit> {
+    override suspend fun sendEmailCode(email: String): RequestResult<Any> {
         return api.sendEmailCode(email).toRequestResult()
     }
 
-    override suspend fun verifyEmail(domain: VerifyEmail): RequestResult<Unit> {
+    override suspend fun verifyEmail(domain: VerifyEmail): RequestResult<Any> {
         return api.verifyEmail(verifyEmailMapper.toData(domain)).toRequestResult()
     }
 

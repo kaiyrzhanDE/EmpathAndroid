@@ -1,4 +1,4 @@
-package kaiyrzhan.de.auth.dialog
+package kaiyrzhan.de.auth.dialog.message_dialog
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -110,7 +110,22 @@ private fun getDialogContent(state: MessageDialogConfig) = when (state) {
         getStringResourcePair(R.string.abort_registration, R.string.abort_registration_warning)
 
     MessageDialogConfig.ABORT_RESET_PASSWORD ->
-        getStringResourcePair(R.string.abort_password_recovery, R.string.abort_password_recovery_warning)
+        getStringResourcePair(
+            R.string.abort_password_recovery,
+            R.string.abort_password_recovery_warning
+        )
+
+    MessageDialogConfig.TOO_MANY_LOGIN_ATTEMPTS ->
+        getStringResourcePair(
+            R.string.too_many_login_attempts,
+            R.string.too_many_login_attempts_warning
+        )
+
+    MessageDialogConfig.TOO_MANY_VERIFICATION_ATTEMPTS ->
+        getStringResourcePair(
+            R.string.too_many_verification_attempts,
+            R.string.too_many_verification_attempts_warning
+        )
 
     MessageDialogConfig.UNKNOWN_ERROR ->
         getStringResourcePair(R.string.oops_something_be_wrong, R.string.try_again_later)
@@ -127,7 +142,9 @@ private fun getDialogActions(state: MessageDialogConfig) = when (state) {
     MessageDialogConfig.ABORT_REGISTRATION, MessageDialogConfig.ABORT_RESET_PASSWORD ->
         getStringResourcePair(R.string.abort, R.string.resume)
 
-    MessageDialogConfig.UNKNOWN_ERROR ->
+    MessageDialogConfig.UNKNOWN_ERROR,
+    MessageDialogConfig.TOO_MANY_LOGIN_ATTEMPTS,
+    MessageDialogConfig.TOO_MANY_VERIFICATION_ATTEMPTS ->
         getStringResourcePair(R.string.close, R.string.okay)
 }
 
@@ -138,8 +155,6 @@ private fun getStringResourcePair(firstId: Int, secondId: Int): Pair<String, Str
 
 @Composable
 @Previews
-private fun Preview() {
-    PreviewTheme {
-        MessageDialogContent(component = FakeMessageDialogComponent())
-    }
+private fun Preview() = PreviewTheme {
+    MessageDialogContent(component = FakeMessageDialogComponent())
 }

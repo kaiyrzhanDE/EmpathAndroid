@@ -14,9 +14,9 @@ interface AuthRepository {
 
     suspend fun resetPassword(domain: ResetPassword): RequestResult<User>
 
-    suspend fun sendEmailCode(email: String): RequestResult<Unit>
+    suspend fun sendEmailCode(email: String): RequestResult<Any>
 
-    suspend fun verifyEmail(domain: VerifyEmail): RequestResult<Unit>
+    suspend fun verifyEmail(domain: VerifyEmail): RequestResult<Any>
 
     suspend fun getUser(): RequestResult<User>
 

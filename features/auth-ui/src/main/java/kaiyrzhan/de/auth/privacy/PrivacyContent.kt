@@ -156,9 +156,8 @@ private fun ExpandableCard(
 
 @Previews
 @Composable
-private fun Preview() {
-    PreviewTheme {
-        PrivacyContent(component = FakePrivacyComponent())
-    }
+private fun Preview() = PreviewTheme {
+    PrivacyContent(component = FakePrivacyComponent())
 }
+
 

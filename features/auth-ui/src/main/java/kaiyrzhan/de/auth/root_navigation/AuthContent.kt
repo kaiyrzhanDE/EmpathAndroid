@@ -11,12 +11,9 @@ import kaiyrzhan.de.auth.privacy.PrivacyContent
 import kaiyrzhan.de.auth.registration.create_account.CreateAccountContent
 import kaiyrzhan.de.auth.registration.entry_code.EntryCodeContent
 import kaiyrzhan.de.auth.registration.entry_email.EntryEmailContent
-import kaiyrzhan.de.auth.registration.optional_info.OptionalComponent
 import kaiyrzhan.de.auth.registration.optional_info.OptionalContent
 import kaiyrzhan.de.auth.registration.reset_password.ResetPasswordContent
 import kaiyrzhan.de.core.animations.slide
-import kaiyrzhan.de.core.navigation.BackHandler
-import kaiyrzhan.de.core.theme.ApplicationTheme
 
 @Composable
 fun AuthContent(component: AuthComponent, modifier: Modifier) {

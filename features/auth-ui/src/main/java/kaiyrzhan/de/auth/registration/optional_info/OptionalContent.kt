@@ -3,11 +3,9 @@ package kaiyrzhan.de.auth.registration.optional_info
 import android.graphics.Path.Op
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.ActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -37,9 +35,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -49,13 +45,10 @@ import coil.compose.AsyncImage
 import kaiyrzhan.de.auth.components.CustomTextField
 import kaiyrzhan.de.auth.registration.optional_info.model.OptionalState
 import kaiyrzhan.de.core.components.ToolbarText
-import kaiyrzhan.de.core.image_picker.model.Image
 import kaiyrzhan.de.core.preview.PreviewTheme
 import kaiyrzhan.de.core.preview.Previews
-import kaiyrzhan.de.core.theme.Gradient
 import kaiyrzhan.de.core.theme.Mustard
 import kaiyrzhan.de.feature_auth.R
-import kotlin.math.sin
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -204,56 +197,54 @@ private fun UserImage(
     image: Uri,
     onSelectImageClicked: () -> Unit,
 ) {
-    PreviewTheme {
-        Box(modifier = Modifier.size(120.dp)) {
-            if (image != Uri.EMPTY) {
-                AsyncImage(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .clip(CircleShape)
-                        .border(
-                            width = 1.dp,
-                            color = MaterialTheme.colorScheme.onBackground,
-                            shape = CircleShape,
-                        ),
-                    model = image,
-                    contentDescription = null,
-                    contentScale = ContentScale.Crop,
-                )
-            } else {
-                Icon(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .clip(CircleShape)
-                        .border(
-                            width = 1.dp,
-                            color = MaterialTheme.colorScheme.onBackground,
-                            shape = CircleShape,
-                        ),
-                    painter = painterResource(id = R.drawable.ic_user),
-                    contentDescription = null
-                )
-            }
-            Card(
+    Box(modifier = Modifier.size(120.dp)) {
+        if (image != Uri.EMPTY) {
+            AsyncImage(
                 modifier = Modifier
-                    .size(36.dp)
-                    .align(Alignment.BottomEnd),
-                shape = CircleShape,
-                border = BorderStroke(width = 1.dp, color = Mustard),
-                colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.background
-                )
+                    .fillMaxSize()
+                    .clip(CircleShape)
+                    .border(
+                        width = 1.dp,
+                        color = MaterialTheme.colorScheme.onBackground,
+                        shape = CircleShape,
+                    ),
+                model = image,
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+            )
+        } else {
+            Icon(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .clip(CircleShape)
+                    .border(
+                        width = 1.dp,
+                        color = MaterialTheme.colorScheme.onBackground,
+                        shape = CircleShape,
+                    ),
+                painter = painterResource(id = R.drawable.ic_user),
+                contentDescription = null
+            )
+        }
+        Card(
+            modifier = Modifier
+                .size(36.dp)
+                .align(Alignment.BottomEnd),
+            shape = CircleShape,
+            border = BorderStroke(width = 1.dp, color = Mustard),
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.background
+            )
+        ) {
+            IconButton(
+                modifier = Modifier.fillMaxSize(),
+                onClick = onSelectImageClicked
             ) {
-                IconButton(
-                    modifier = Modifier.fillMaxSize(),
-                    onClick = onSelectImageClicked
-                ) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_photo_camera),
-                        contentDescription = stringResource(id = R.string.photo),
-                        tint = Mustard,
-                    )
-                }
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_photo_camera),
+                    contentDescription = stringResource(id = R.string.photo),
+                    tint = Mustard,
+                )
             }
         }
     }
@@ -262,8 +253,6 @@ private fun UserImage(
 
 @Previews
 @Composable
-private fun Preview() {
-    PreviewTheme {
-        OptionalContent(FakeOptionalComponent())
-    }
+private fun Preview() = PreviewTheme {
+    OptionalContent(FakeOptionalComponent())
 }

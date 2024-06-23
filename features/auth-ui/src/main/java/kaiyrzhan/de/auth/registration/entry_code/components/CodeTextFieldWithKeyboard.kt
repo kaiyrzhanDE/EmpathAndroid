@@ -228,16 +228,14 @@ private fun Key(
 
 @Previews
 @Composable
-private fun Preview() {
-    PreviewTheme {
-        Column {
-            CodeTextFieldWithKeyboard(
-                onNumberClicked = {},
-                onRemoveClicked = {},
-                onEnterClicked = {},
-                code = "",
-                length = 6,
-            )
-        }
+private fun Preview() = PreviewTheme {
+    Column {
+        CodeTextFieldWithKeyboard(
+            onNumberClicked = {},
+            onRemoveClicked = {},
+            onEnterClicked = {},
+            code = "",
+            length = 6,
+        )
     }
 }

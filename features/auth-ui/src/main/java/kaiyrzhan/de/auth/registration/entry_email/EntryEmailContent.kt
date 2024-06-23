@@ -28,7 +28,7 @@ import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.extensions.compose.jetpack.subscribeAsState
 import kaiyrzhan.de.auth.components.CustomTextField
 import kaiyrzhan.de.auth.components.IconWithDescription
-import kaiyrzhan.de.auth.dialog.MessageDialogContent
+import kaiyrzhan.de.auth.dialog.message_dialog.MessageDialogContent
 import kaiyrzhan.de.auth.registration.entry_email.model.EntryEmailState
 import kaiyrzhan.de.core.components.ToolbarText
 import kaiyrzhan.de.auth.model.ToolbarState
@@ -149,9 +149,7 @@ private fun ColumnScope.Email(
 
 @Previews
 @Composable
-private fun Preview() {
-    PreviewTheme {
-        EntryEmailContent(FakeEntryEmailComponent())
-    }
+private fun Preview() = PreviewTheme {
+    EntryEmailContent(FakeEntryEmailComponent())
 }
 
